@@ -18,6 +18,11 @@ from .const import (
     LOGGER,
     UPDATE_INTERVAL,
 )
+from .octopusnet import (
+    OctopusNetClient,
+    OctopusNetClientTimeoutError,
+    OctopusNetClientConnectionError,
+)
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -26,8 +31,8 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(
         self,
-        entry: ConfigEntry,
         hass: HomeAssistant,
+        client: OctopusNetClient,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
         """Initialize."""
@@ -37,7 +42,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=update_interval,
         )
-        self.entry = entry
+        self.client = client
 
     async def __aenter__(self):
         """Return Self."""
