@@ -21,24 +21,5 @@
       "existing_instance_updated": "Updated existing configuration.",
       "already_configured": "[%key:common::config_flow::abort::already_configured_service%]"
     }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "description": "Manage your Octopus NET instance to allow monitoring.",
-        "data": {
-          "host": "Host",
-          "port": "Port",
-          "ssl": "Uses an SSL certificate",
-          "verify_ssl": "Verify SSL certificate"
-        }
-      }
-    },
-    "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_host": "Invalid hostname or IP address",
-      "unknown": "Unexpected error",
-      "timeout_connect": "Timeout establishing connection"
-    }
   }
 }
