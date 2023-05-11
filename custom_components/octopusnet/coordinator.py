@@ -21,7 +21,7 @@ from .const import (
 from .octopusnet import (
     OctopusNetClient,
     OctopusNetClientTimeoutError,
-    OctopusNetClientConnectionError,
+    OctopusNetClientCommunicationError,
 )
 
 
@@ -32,6 +32,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
+        entry: ConfigEntry,
         client: OctopusNetClient,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
@@ -42,7 +43,12 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=update_interval,
         )
+        self.entry = entry
         self.client = client
+        
+        self.client.async_fan_speed()
+        self.client.async_tuner_status()
+        self.client.async_stream_status()
 
     async def __aenter__(self):
         """Return Self."""

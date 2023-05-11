@@ -18,7 +18,7 @@ from .const import (
 from .octopusnet import (
     OctopusNetClient,
     OctopusNetClientTimeoutError,
-    OctopusNetClientConnectionError,
+    OctopusNetClientCommunicationError,
 )
 from .services import async_setup_services
 from .coordinator import OctopusNetDataUpdateCoordinator
@@ -38,6 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator = OctopusNetDataUpdateCoordinator(
         hass=hass,
+        entry=entry,
         client=OctopusNetClient(
             host=entry.data[CONF_HOST],
             port=entry.data[CONF_PORT],
