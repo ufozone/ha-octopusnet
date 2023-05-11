@@ -19,7 +19,7 @@ class OctopusNetClientTimeoutError(OctopusNetClientError):
     """Exception to indicate a timeout error."""
 
 
-class OctopusNetClientConnectionError(OctopusNetClientError):
+class OctopusNetClientCommunicationError(OctopusNetClientError):
     """Exception to indicate a communication error."""
 
 
@@ -69,6 +69,10 @@ class OctopusNetClient:
                     raise OctopusNetClientAuthenticationError(
                         "Invalid credentials",
                     )
+                if response.status in (404, 500, 501, 502, 503, 504):
+                    raise OctopusNetClientError(
+                        "Not supported",
+                    )
                 response.raise_for_status()
                 return response
         except asyncio.TimeoutError as exception:
@@ -76,7 +80,7 @@ class OctopusNetClient:
                 "Timeout error fetching information"
             ) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            raise OctopusNetClientConnectionError(
+            raise OctopusNetClientCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:  # pylint: disable=broad-except
@@ -91,3 +95,41 @@ class OctopusNetClient:
             url=f"{self._endpoint}/system/fanspeed",
         )
         LOGGER.debug(response)
+
+    async def async_tuner_status(self) -> any:
+        """Get current tuner status."""
+        response = await self._async_request_wrapper(
+            method="GET",
+            url=f"{self._endpoint}/octoserve/tunerstatus.json",
+        )
+        try:
+            response_json = await response.json()
+            LOGGER.debug(response_json)
+            if "TunerList" not in response_json:
+                raise OctopusNetClientCommunicationError(
+                    "Authorization failed. Please check the application configuration."
+                )
+            return response_json.get("TunerList")
+        except (aiohttp.ContentTypeError, OctopusNetClientCommunicationError) as exception:
+            raise OctopusNetClientCommunicationError(
+                "Error fetching information"
+            ) from exception
+
+    async def async_stream_status(self) -> any:
+        """Get current stream status."""
+        response = await self._async_request_wrapper(
+            method="GET",
+            url=f"{self._endpoint}/octoserve/streamstatus.json",
+        )
+        try:
+            response_json = await response.json()
+            LOGGER.debug(response_json)
+            if "StreamList" not in response_json:
+                raise OctopusNetClientCommunicationError(
+                    "Authorization failed. Please check the application configuration."
+                )
+            return response_json.get("StreamList")
+        except (aiohttp.ContentTypeError, OctopusNetClientCommunicationError) as exception:
+            raise OctopusNetClientCommunicationError(
+                "Error fetching information"
+            ) from exception
