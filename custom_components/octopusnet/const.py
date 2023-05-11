@@ -14,13 +14,13 @@ DOMAIN = "octopusnet"
 MANUFACTURER = "Digital Devices"
 
 PLATFORMS = [
-    #Platform.BINARY_SENSOR,
-    #Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.SENSOR,
 ]
 
 UPDATE_INTERVAL = 120
 
-SERVICE_REBOOT = "set_profile"
+SERVICE_REBOOT = "reboot"
 SERVICE_REBOOT_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_DEVICE_ID): cv.entity_ids_or_uuids,
