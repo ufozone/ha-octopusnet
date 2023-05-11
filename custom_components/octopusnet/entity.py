@@ -3,10 +3,6 @@ from __future__ import annotations
 
 from homeassistant.core import callback
 from homeassistant.const import (
-    CONF_HOST,
-    CONF_PORT,
-    CONF_SSL,
-    CONF_VERIFY_SSL,
     ATTR_NAME,
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,

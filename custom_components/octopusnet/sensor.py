@@ -1,8 +1,6 @@
 """Digital Devices Octopus NET sensor platform."""
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     CONF_HOST,
@@ -17,16 +15,9 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.typing import (
-    ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
-)
 
 from .const import (
     DOMAIN,
-    CONF_TUNER_COUNT,
-    CONF_STREAM_COUNT,
     ATTR_FANSPEED,
 )
 from .coordinator import OctopusNetDataUpdateCoordinator

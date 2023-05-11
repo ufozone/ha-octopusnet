@@ -1,8 +1,6 @@
 """Digital Devices Octopus NET sensor platform."""
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     CONF_HOST,
@@ -14,14 +12,8 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.typing import (
-    ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
-)
 
 from .const import (
-    LOGGER,
     DOMAIN,
     CONF_TUNER_COUNT,
     CONF_STREAM_COUNT,
@@ -84,7 +76,7 @@ class OctopusNetBinarySensor(OctopusNetEntity, BinarySensorEntity):
         self,
         coordinator: OctopusNetDataUpdateCoordinator,
         host: str,
-        entity_description: SensorEntityDescription,
+        entity_description: BinarySensorEntityDescription,
     ) -> None:
         """Initialize the sensor class."""
         super().__init__(

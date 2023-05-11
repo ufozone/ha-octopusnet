@@ -8,8 +8,6 @@ import async_timeout
 
 from homeassistant.helpers.aiohttp_client import HassClientResponse
 
-from .const import LOGGER
-
 
 class OctopusNetClientError(Exception):
     """Exception to indicate a general client error."""
@@ -190,7 +188,7 @@ class OctopusNetClient:
     async def async_start_reboot(self) -> bool:
         """Start reboot."""
         try:
-            response = await self._async_request_wrapper(
+            await self._async_request_wrapper(
                 method="GET",
                 url=f"{self._endpoint}/system/reboot",
             )
@@ -201,7 +199,7 @@ class OctopusNetClient:
     async def async_epg_scan(self) -> bool:
         """Start epg scan."""
         try:
-            response = await self._async_request_wrapper(
+            await self._async_request_wrapper(
                 method="GET",
                 url=f"{self._endpoint}/epg/scan",
             )

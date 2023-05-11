@@ -17,8 +17,6 @@ from .const import (
 )
 from .octopusnet import (
     OctopusNetClient,
-    OctopusNetClientTimeoutError,
-    OctopusNetClientCommunicationError,
 )
 from .services import async_setup_services
 from .coordinator import OctopusNetDataUpdateCoordinator
