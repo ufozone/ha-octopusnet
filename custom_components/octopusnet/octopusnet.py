@@ -88,48 +88,123 @@ class OctopusNetClient:
                 "Something really wrong happened!"
             ) from exception
 
-    async def async_fan_speed(self) -> any:
+    async def async_get_temperature(self) -> float:
+        """Get current temperature."""
+        try:
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/log/Temperatur.log",
+            )
+            response_text = await response.text()
+            response_lines = response_text.splitlines()
+            if len(response_lines) < 3:
+                raise OctopusNetClientCommunicationError()
+            return float(response_lines[len(response_lines) - 1])
+        except aiohttp.ContentTypeError as exception:
+            raise OctopusNetClientCommunicationError(
+                "Error fetching information"
+            ) from exception
+        except Exception as exception:
+            raise exception
+
+    async def async_get_fanspeed(self) -> int:
         """Get current fan speed."""
-        response = await self._async_request_wrapper(
-            method="GET",
-            url=f"{self._endpoint}/system/fanspeed",
-        )
-        LOGGER.debug(response)
+        try:
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/system/fanspeed",
+            )
+            response_json = await response.json(
+                content_type=None,
+            )
+            if "speed" not in response_json:
+                raise OctopusNetClientCommunicationError()
+            return int(response_json.get("speed", 0))
+        except aiohttp.ContentTypeError as exception:
+            raise OctopusNetClientCommunicationError(
+                "Error fetching information"
+            ) from exception
+        except Exception as exception:
+            raise exception
 
-    async def async_tuner_status(self) -> any:
+    async def async_get_epg(self) -> dict:
+        """Get current epg status."""
+        try:
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/epg/status",
+            )
+            response_json = await response.json(
+                content_type=None,
+            )
+            if "status" not in response_json:
+                raise OctopusNetClientCommunicationError()
+            return response_json
+        except aiohttp.ContentTypeError as exception:
+            raise OctopusNetClientCommunicationError(
+                "Error fetching information"
+            ) from exception
+        except Exception as exception:
+            raise exception
+
+    async def async_get_tuner_status(self) -> dict:
         """Get current tuner status."""
-        response = await self._async_request_wrapper(
-            method="GET",
-            url=f"{self._endpoint}/octoserve/tunerstatus.json",
-        )
         try:
-            response_json = await response.json()
-            LOGGER.debug(response_json)
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/octoserve/tunerstatus.json",
+            )
+            response_json = await response.json(
+                content_type=None,
+            )
             if "TunerList" not in response_json:
-                raise OctopusNetClientCommunicationError(
-                    "Authorization failed. Please check the application configuration."
-                )
-            return response_json.get("TunerList")
-        except (aiohttp.ContentTypeError, OctopusNetClientCommunicationError) as exception:
+                raise OctopusNetClientCommunicationError()
+            return response_json.get("TunerList", {})
+        except aiohttp.ContentTypeError as exception:
             raise OctopusNetClientCommunicationError(
                 "Error fetching information"
             ) from exception
+        except Exception as exception:
+            raise exception
 
-    async def async_stream_status(self) -> any:
+    async def async_get_stream_status(self) -> dict:
         """Get current stream status."""
-        response = await self._async_request_wrapper(
-            method="GET",
-            url=f"{self._endpoint}/octoserve/streamstatus.json",
-        )
         try:
-            response_json = await response.json()
-            LOGGER.debug(response_json)
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/octoserve/streamstatus.json",
+            )
+            response_json = await response.json(
+                content_type=None,
+            )
             if "StreamList" not in response_json:
-                raise OctopusNetClientCommunicationError(
-                    "Authorization failed. Please check the application configuration."
-                )
-            return response_json.get("StreamList")
-        except (aiohttp.ContentTypeError, OctopusNetClientCommunicationError) as exception:
+                raise OctopusNetClientCommunicationError()
+            return response_json.get("StreamList", {})
+        except aiohttp.ContentTypeError as exception:
             raise OctopusNetClientCommunicationError(
                 "Error fetching information"
             ) from exception
+        except Exception as exception:
+            raise exception
+
+    async def async_start_reboot(self) -> bool:
+        """Start reboot."""
+        try:
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/system/reboot",
+            )
+            return True
+        except Exception as exception:
+            raise exception
+
+    async def async_epg_scan(self) -> bool:
+        """Start epg scan."""
+        try:
+            response = await self._async_request_wrapper(
+                method="GET",
+                url=f"{self._endpoint}/epg/scan",
+            )
+            return True
+        except Exception as exception:
+            raise exception
