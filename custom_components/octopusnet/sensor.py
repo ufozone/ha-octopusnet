@@ -8,6 +8,7 @@ from homeassistant.const import (
     CONF_HOST,
     REVOLUTIONS_PER_MINUTE,
     UnitOfTemperature,
+    ATTR_TEMPERATURE,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import (
@@ -23,10 +24,10 @@ from homeassistant.helpers.typing import (
 )
 
 from .const import (
-    LOGGER,
     DOMAIN,
     CONF_TUNER_COUNT,
     CONF_STREAM_COUNT,
+    ATTR_FANSPEED,
 )
 from .coordinator import OctopusNetDataUpdateCoordinator
 from .entity import OctopusNetEntity
@@ -41,16 +42,18 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     entity_descriptions = [
         SensorEntityDescription(
-            key="fanspeed",
+            key=ATTR_FANSPEED,
             device_class=SensorDeviceClass.SPEED,
+            native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
             unit_of_measurement=REVOLUTIONS_PER_MINUTE,
-            translation_key="fanspeed",
+            translation_key=ATTR_FANSPEED,
         ),
         SensorEntityDescription(
-            key="temperature",
+            key=ATTR_TEMPERATURE,
             device_class=SensorDeviceClass.TEMPERATURE,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key="temperature",
+            translation_key=ATTR_TEMPERATURE,
         ),
     ]
 
@@ -84,3 +87,8 @@ class OctopusNetSensor(OctopusNetEntity, SensorEntity):
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
+
+    @property
+    def native_value(self) -> str:
+        """Return the native value of the sensor."""
+        return self._get_state()

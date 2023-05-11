@@ -3,26 +3,44 @@ from __future__ import annotations
 
 from datetime import (
     timedelta,
+    datetime,
+    timezone,
 )
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import (
+    ATTR_STATE,
+    ATTR_TEMPERATURE,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
-    UpdateFailed,
 )
-from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from .const import (
     DOMAIN,
     LOGGER,
     UPDATE_INTERVAL,
+    ATTR_FANSPEED,
+    ATTR_EXTRA_STATE_ATTRIBUTES,
+    ATTR_EPG,
+    ATTR_TOTAL,
+    ATTR_EVENTS,
+    ATTR_TUNER,
+    ATTR_LOCK,
+    ATTR_STRENGTH,
+    ATTR_SNR,
+    ATTR_QUALITY,
+    ATTR_LEVEL,
+    ATTR_STREAM,
+    ATTR_INPUT,
+    ATTR_PACKETS,
+    ATTR_BYTES,
+    ATTR_CLIENT,
+    ATTR_AVAILABLE,
+    ATTR_LAST_PULL,
 )
-from .octopusnet import (
-    OctopusNetClient,
-    OctopusNetClientTimeoutError,
-    OctopusNetClientCommunicationError,
-)
+from .octopusnet import OctopusNetClient
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -45,10 +63,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         )
         self.entry = entry
         self.client = client
-        
-        self.client.async_fan_speed()
-        self.client.async_tuner_status()
-        self.client.async_stream_status()
+        self._last_pull = None
 
     async def __aenter__(self):
         """Return Self."""
@@ -60,19 +75,91 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Update data via library."""
-        LOGGER.debug("_async_update_data")
-        # TODO
+        _available = False
+        _data = {}
+        try:
+            _data[ATTR_FANSPEED] = {
+                ATTR_STATE: await self.client.async_get_fanspeed(),
+            }
+            _data[ATTR_TEMPERATURE] = {
+                ATTR_STATE: await self.client.async_get_temperature(),
+            }
+            _epg = await self.client.async_get_epg()
+            _epg_state = True if _epg.get("status") == "active" else False
+            _data[ATTR_EPG] = {
+                ATTR_STATE: _epg_state,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_TOTAL: _epg.get("total", 0),
+                    ATTR_EVENTS: _epg.get("events", 0),
+                },
+            }
+            ATTR_EVENTS
+            _tuner_index = 1
+            _tuner_status = await self.client.async_get_tuner_status()
+            for _tuner in _tuner_status:
+                _tuner_key = f"{ATTR_TUNER}_{_tuner_index}"
+                _tuner_state = True if _tuner.get("Status") == "Active" else False
+                _tuner_strength = _tuner_snr = _tuner_quality = _tuner_level = 0
+                if _tuner_state is True:
+                    _tuner_strength = ((int(_tuner.get("Strength", 0)) + 108750) / 1000)
+                    _tuner_snr = (int(_tuner.get("SNR", 0)) / 1000)
+                    _tuner_quality = _tuner.get("Quality", 0)
+                    _tuner_level = _tuner.get("Level", 0)
+                _data[_tuner_key] = {
+                    ATTR_STATE: _tuner_state,
+                    ATTR_EXTRA_STATE_ATTRIBUTES: {
+                        ATTR_LOCK: _tuner.get("Lock", False),
+                        ATTR_STRENGTH: _tuner_strength,
+                        ATTR_SNR: _tuner_snr,
+                        ATTR_QUALITY: _tuner_quality,
+                        ATTR_LEVEL: _tuner_level,
+                    }
+                }
+                _tuner_index = _tuner_index + 1
+
+            _stream_index = 1
+            _stream_status = await self.client.async_get_stream_status()
+            for _stream in _stream_status:
+                _stream_key = f"{ATTR_STREAM}_{_stream_index}"
+                _stream_state = True if _stream.get("Status") == "Active" else False
+                _data[_stream_key] = {
+                    ATTR_STATE: _stream_state,
+                    ATTR_EXTRA_STATE_ATTRIBUTES: {
+                        ATTR_INPUT: _stream.get("Input", 0),
+                        ATTR_PACKETS: _stream.get("Packets", 0),
+                        ATTR_BYTES: _stream.get("Bytes", 0),
+                        ATTR_CLIENT: _stream.get("Client", ""),
+                    }
+                }
+                _stream_index = _stream_index + 1
+
+            self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
+            _available = True
+        except Exception as exception:
+            LOGGER.exception(exception)
+
+        _data.update(
+            {
+                ATTR_LAST_PULL: self._last_pull,
+                ATTR_AVAILABLE: _available,
+            }
+        )
+        return _data
 
     async def async_reboot(
         self,
     ) -> bool:
         """Send command reboot to device."""
-        LOGGER.debug("reboot")
-        # TODO
+        try:
+            return await self.client.async_start_reboot()
+        except Exception as exception:
+            LOGGER.exception(exception)
 
     async def async_epg_scan(
         self,
     ) -> bool:
         """Send command epg_scan to device."""
-        LOGGER.debug("epg_scan")
-        # TODO
+        try:
+            return await self.client.async_epg_scan()
+        except Exception as exception:
+            LOGGER.exception(exception)

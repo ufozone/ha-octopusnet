@@ -16,9 +16,10 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import (
-    LOGGER,
     DOMAIN,
     MANUFACTURER,
+    ATTR_EXTRA_STATE_ATTRIBUTES,
+    ATTR_AVAILABLE,
     ATTR_LAST_PULL,
 )
 from .coordinator import OctopusNetDataUpdateCoordinator
@@ -46,23 +47,21 @@ class OctopusNetEntity(CoordinatorEntity):
         else:
             self._unique_id = slugify(f"{self._host}")
 
-        self._available = True
-        self._last_pull = None
-
-        self._additional_extra_state_attributes = {}
-
         self.entity_id = f"{entity_type}.{self._unique_id}"
 
-    def _get_attributes(
+    def _get_state(
+        self,
+    ) -> any:
+        """Get state of the current entity."""
+        return self.coordinator.data.get(self._entity_key, {}).get(ATTR_STATE, None)
+
+    def _get_attribute(
         self,
         attr: str,
+        default_value: any | None = None,
     ) -> any:
-        """Get the mower attributes of the current mower."""
-        return self.coordinator.data.get(self._entity_key, {}).get(attr)
-
-    def _update_extra_state_attributes(self) -> None:
-        """Update extra attributes."""
-        self._additional_extra_state_attributes = {}
+        """Get attribute of the current entity."""
+        return self.coordinator.data.get(self._entity_key, {}).get(attr, default_value)
 
     @property
     def name(self) -> str:
@@ -77,7 +76,7 @@ class OctopusNetEntity(CoordinatorEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self._available
+        return self.coordinator.data.get(ATTR_AVAILABLE)
 
     @property
     def device_info(self):
@@ -93,11 +92,12 @@ class OctopusNetEntity(CoordinatorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, any]:
         """Return axtra attributes."""
-        _extra_state_attributes = {
-            ATTR_LAST_PULL: self._last_pull,
-        }
-        _extra_state_attributes.update(self._additional_extra_state_attributes)
-
+        _extra_state_attributes = self._get_attribute(ATTR_EXTRA_STATE_ATTRIBUTES, {})
+        _extra_state_attributes.update(
+            {
+                ATTR_LAST_PULL: self.coordinator.data.get(ATTR_LAST_PULL),
+            }
+        )
         return _extra_state_attributes
 
     async def async_update(self) -> None:
@@ -112,5 +112,3 @@ class OctopusNetEntity(CoordinatorEntity):
 
     def _update_handler(self) -> None:
         """Handle updated data."""
-        LOGGER.debug(self.coordinator.data)
-        self._update_extra_state_attributes()

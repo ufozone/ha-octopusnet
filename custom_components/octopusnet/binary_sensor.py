@@ -25,6 +25,9 @@ from .const import (
     DOMAIN,
     CONF_TUNER_COUNT,
     CONF_STREAM_COUNT,
+    ATTR_EPG,
+    ATTR_TUNER,
+    ATTR_STREAM,
 )
 from .coordinator import OctopusNetDataUpdateCoordinator
 from .entity import OctopusNetEntity
@@ -37,21 +40,27 @@ async def async_setup_entry(
 ) -> None:
     """Do setup sensors from a config entry created in the integrations UI."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
-    entity_descriptions = []
+    entity_descriptions = [
+        BinarySensorEntityDescription(
+            key=ATTR_EPG,
+            device_class=BinarySensorDeviceClass.RUNNING,
+            translation_key=ATTR_EPG,
+        )
+    ]
     for i in range(1, config_entry.data[CONF_TUNER_COUNT] + 1):
         entity_descriptions.append(
             BinarySensorEntityDescription(
-                key=f"tuner_{i}",
+                key=f"{ATTR_TUNER}_{i}",
                 device_class=BinarySensorDeviceClass.RUNNING,
-                translation_key="tuner",
+                translation_key=ATTR_TUNER,
             )
         )
     for i in range(1, config_entry.data[CONF_STREAM_COUNT] + 1):
         entity_descriptions.append(
             BinarySensorEntityDescription(
-                key=f"stream_{i}",
+                key=f"{ATTR_STREAM}_{i}",
                 device_class=BinarySensorDeviceClass.RUNNING,
-                translation_key="stream",
+                translation_key=ATTR_STREAM,
             )
         )
 
@@ -85,3 +94,8 @@ class OctopusNetBinarySensor(OctopusNetEntity, BinarySensorEntity):
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
+
+    @property
+    def is_on(self) -> bool:
+        """Return true if the binary_sensor is on."""
+        return self._get_state()

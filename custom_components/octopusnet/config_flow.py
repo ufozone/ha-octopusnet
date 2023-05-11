@@ -66,8 +66,8 @@ class OctopusNetConfigFlow(ConfigFlow, domain=DOMAIN):
                     verify_ssl=user_input[CONF_VERIFY_SSL],
                     session=session,
                 )
-                _tuners = await octopus.async_tuner_status()
-                _streams = await octopus.async_stream_status()
+                _tuners = await octopus.async_get_tuner_status()
+                _streams = await octopus.async_get_stream_status()
             except OctopusNetClientTimeoutError as exception:
                 LOGGER.info(exception)
                 errors["base"] = "timeout_connect"
