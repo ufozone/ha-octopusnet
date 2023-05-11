@@ -20,6 +20,11 @@ PLATFORMS = [
 
 UPDATE_INTERVAL = 120
 
+CONF_TUNER_COUNT = "tuner_count"
+CONF_STREAM_COUNT = "stream_count"
+
+ATTR_LAST_PULL = "last_pull"
+
 SERVICE_REBOOT = "reboot"
 SERVICE_REBOOT_SCHEMA = vol.Schema(
     {
