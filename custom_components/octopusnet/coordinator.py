@@ -152,7 +152,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _stream_packets = _stream.get("Packets", 0)
                 _stream_bytes = _stream.get("Bytes", 0)
                 _stream_client = _stream.get("Client", "")
-                if _stream_input:
+                if _stream_state:
                     _stream_total_state = True
                 _stream_total_input += _stream_input
                 _stream_total_packets += _stream_packets
