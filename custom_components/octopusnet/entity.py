@@ -62,6 +62,9 @@ class OctopusNetEntity(CoordinatorEntity):
     @property
     def name(self) -> str:
         """Return the name of the entity."""
+        if self._entity_key:
+            _title = self._entity_key.capitalize().replace("_", " ")
+            return f"{self._host} {_title}"
         return self._host
 
     @property
