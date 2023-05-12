@@ -37,7 +37,17 @@ async def async_setup_entry(
             key=ATTR_EPG,
             device_class=BinarySensorDeviceClass.RUNNING,
             translation_key=ATTR_EPG,
-        )
+        ),
+        BinarySensorEntityDescription(
+            key=ATTR_TUNER,
+            device_class=BinarySensorDeviceClass.RUNNING,
+            translation_key=ATTR_TUNER,
+        ),
+        BinarySensorEntityDescription(
+            key=ATTR_STREAM,
+            device_class=BinarySensorDeviceClass.RUNNING,
+            translation_key=ATTR_STREAM,
+        ),
     ]
     for i in range(1, config_entry.data[CONF_TUNER_COUNT] + 1):
         entity_descriptions.append(

@@ -27,6 +27,7 @@ from .const import (
     ATTR_TOTAL,
     ATTR_EVENTS,
     ATTR_TUNER,
+    ATTR_COUNT,
     ATTR_LOCK,
     ATTR_STRENGTH,
     ATTR_SNR,
@@ -93,8 +94,8 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_EVENTS: _epg.get("events", 0),
                 },
             }
-            ATTR_EVENTS
             _tuner_index = 1
+            _tuner_total_count = _tuner_total_strength = _tuner_total_snr = _tuner_total_quality = _tuner_total_level = 0
             _tuner_status = await self.client.async_get_tuner_status()
             for _tuner in _tuner_status:
                 _tuner_key = f"{ATTR_TUNER}_{_tuner_index}"
@@ -105,6 +106,12 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                     _tuner_snr = (int(_tuner.get("SNR", 0)) / 1000)
                     _tuner_quality = _tuner.get("Quality", 0)
                     _tuner_level = _tuner.get("Level", 0)
+                    _tuner_total_count += 1
+                    _tuner_total_strength += _tuner_strength
+                    _tuner_total_snr += _tuner_snr
+                    _tuner_total_quality += _tuner_quality
+                    _tuner_total_level += _tuner_level
+
                 _data[_tuner_key] = {
                     ATTR_STATE: _tuner_state,
                     ATTR_EXTRA_STATE_ATTRIBUTES: {
@@ -117,22 +124,62 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 }
                 _tuner_index = _tuner_index + 1
 
+            if _tuner_total_count > 0:
+                _tuner_total_strength = (_tuner_total_strength / _tuner_total_count)
+                _tuner_total_snr = (_tuner_total_snr / _tuner_total_count)
+                _tuner_total_quality = (_tuner_total_quality / _tuner_total_count)
+                _tuner_total_level = (_tuner_total_level / _tuner_total_count)
+
+            _data[ATTR_TUNER] = {
+                ATTR_STATE: True if _tuner_total_count > 0 else False,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_COUNT: _tuner_total_count,
+                    ATTR_STRENGTH: _tuner_total_strength,
+                    ATTR_SNR: _tuner_total_snr,
+                    ATTR_QUALITY: _tuner_total_quality,
+                    ATTR_LEVEL: _tuner_total_level,
+                },
+            }
+
             _stream_index = 1
+            _stream_total_state = False
+            _stream_total_input = _stream_total_packets = _stream_total_bytes = _stream_total_clients = 0
             _stream_status = await self.client.async_get_stream_status()
             for _stream in _stream_status:
                 _stream_key = f"{ATTR_STREAM}_{_stream_index}"
                 _stream_state = True if _stream.get("Status") == "Active" else False
+                _stream_input = _stream.get("Input", 0)
+                _stream_packets = _stream.get("Packets", 0)
+                _stream_bytes = _stream.get("Bytes", 0)
+                _stream_client = _stream.get("Client", "")
+                if _stream_input:
+                    _stream_total_state = True
+                _stream_total_input += _stream_input
+                _stream_total_packets += _stream_packets
+                _stream_total_bytes += _stream_bytes
+                if _stream_client:
+                    _stream_total_clients += len(_stream_client.split(","))
+
                 _data[_stream_key] = {
                     ATTR_STATE: _stream_state,
                     ATTR_EXTRA_STATE_ATTRIBUTES: {
-                        ATTR_INPUT: _stream.get("Input", 0),
-                        ATTR_PACKETS: _stream.get("Packets", 0),
-                        ATTR_BYTES: _stream.get("Bytes", 0),
-                        ATTR_CLIENT: _stream.get("Client", ""),
+                        ATTR_INPUT: _stream_input,
+                        ATTR_PACKETS: _stream_packets,
+                        ATTR_BYTES: _stream_bytes,
+                        ATTR_CLIENT: _stream_client,
                     }
                 }
                 _stream_index = _stream_index + 1
 
+            _data[ATTR_STREAM] = {
+                ATTR_STATE: _stream_total_state,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_INPUT: _stream_total_input,
+                    ATTR_PACKETS: _stream_total_packets,
+                    ATTR_BYTES: _stream_total_bytes,
+                    ATTR_CLIENT: _stream_total_clients,
+                },
+            }
             self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
             _available = True
         except Exception as exception:

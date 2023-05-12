@@ -39,6 +39,9 @@
       },
       "tuner": {
         "state_attributes": {
+          "count": {
+            "name": "Anzahl"
+          },
           "lock": {
             "name": "Gesperrt",
             "state": {

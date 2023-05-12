@@ -39,6 +39,9 @@
       },
       "tuner": {
         "state_attributes": {
+          "count": {
+            "name": "Count"
+          },
           "lock": {
             "name": "Lock",
             "state": {
