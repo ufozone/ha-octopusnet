@@ -86,7 +86,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 ATTR_STATE: await self.client.async_get_temperature(),
             }
             _epg = await self.client.async_get_epg()
-            _epg_state = True if _epg.get("status") == "active" else False
+            _epg_state = _epg.get("status") == "active"
             _data[ATTR_EPG] = {
                 ATTR_STATE: _epg_state,
                 ATTR_EXTRA_STATE_ATTRIBUTES: {
@@ -99,7 +99,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             _tuner_status = await self.client.async_get_tuner_status()
             for _tuner in _tuner_status:
                 _tuner_key = f"{ATTR_TUNER}_{_tuner_index}"
-                _tuner_state = True if _tuner.get("Status") == "Active" else False
+                _tuner_state = _tuner.get("Status") == "Active"
                 _tuner_strength = _tuner_snr = _tuner_quality = _tuner_level = 0
                 if _tuner_state is True:
                     _tuner_strength = ((int(_tuner.get("Strength", 0)) + 108750) / 1000)
@@ -147,7 +147,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             _stream_status = await self.client.async_get_stream_status()
             for _stream in _stream_status:
                 _stream_key = f"{ATTR_STREAM}_{_stream_index}"
-                _stream_state = True if _stream.get("Status") == "Active" else False
+                _stream_state = _stream.get("Status") == "Active"
                 _stream_input = _stream.get("Input", 0)
                 _stream_packets = _stream.get("Packets", 0)
                 _stream_bytes = _stream.get("Bytes", 0)
