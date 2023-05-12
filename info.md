@@ -48,11 +48,25 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
     total, events
     ```
 
+* tuner
+
+    ```
+    attributes: 
+    count, avg. strength, avg. snr, avg. quality, avg. level
+    ```
+
 * tuner_{n}
 
     ```
     attributes: 
     lock, strength, snr, quality, level
+    ```
+
+* stream
+
+    ```
+    attributes: 
+    total input, total packets, total bytes, total clients
     ```
 
 * stream_{n}
