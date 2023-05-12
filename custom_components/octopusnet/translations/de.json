@@ -2,24 +2,24 @@
   "config": {
     "step": {
       "user": {
-        "description": "Set up your Octopus NET instance to allow monitoring.",
+        "description": "Richte deine Octopus NET-Instanz ein, sodass eine Überwachung möglich ist.",
         "data": {
           "host": "Host",
           "port": "Port",
-          "ssl": "Uses an SSL certificate",
-          "verify_ssl": "Verify SSL certificate"
+          "ssl": "Verwendet ein SSL-Zertifikat",
+          "verify_ssl": "SSL-Zertifikat überprüfen"
         }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_host": "Invalid hostname or IP address",
-      "unknown": "Unexpected error",
-      "timeout_connect": "Timeout establishing connection"
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_host": "Ungültiger Hostname oder IP-Adresse",
+      "unknown": "Unerwarteter Fehler",
+      "timeout_connect": "Zeitüberschreitung beim Verbindungsaufbau"
     },
     "abort": {
-      "existing_instance_updated": "Updated existing configuration",
-      "already_configured": "Service is already configured"
+      "existing_instance_updated": "Die bestehende Konfiguration wurde aktualisiert",
+      "already_configured": "Dienst ist bereits konfiguriert"
     }
   },
   "entity": {
@@ -30,36 +30,36 @@
             "name": "Total"
           },
           "events": {
-            "name": "Events"
+            "name": "Ereignisse"
           },
           "last_pull": {
-            "name": "Last pull"
+            "name": "Letzter Abruf"
           }
         }
       },
       "tuner": {
         "state_attributes": {
           "lock": {
-            "name": "Lock",
+            "name": "Gesperrt",
             "state": {
-              "true": "Yes",
-              "false": "No"
+              "true": "Ja",
+              "false": "Nein"
             }
           },
           "strength": {
-            "name": "Strength (dBµV)"
+            "name": "Signalstärke (dBµV)"
           },
           "snr": {
             "name": "SNR (dB)"
           },
           "quality": {
-            "name": "Quality"
+            "name": "Qualität"
           },
           "level": {
             "name": "Level"
           },
           "last_pull": {
-            "name": "Last pull"
+            "name": "Letzter Abruf"
           }
         }
       },
@@ -69,7 +69,7 @@
             "name": "Input"
           },
           "packets": {
-            "name": "Packets"
+            "name": "Pakete"
           },
           "bytes": {
             "name": "Bytes"
@@ -78,7 +78,7 @@
             "name": "Client"
           },
           "last_pull": {
-            "name": "Last pull"
+            "name": "Letzter Abruf"
           }
         }
       }
@@ -87,14 +87,14 @@
       "fanspeed": {
         "state_attributes": {
           "last_pull": {
-            "name": "Last pull"
+            "name": "Letzter Abruf"
           }
         }
       },
       "temperature": {
         "state_attributes": {
           "last_pull": {
-            "name": "Last pull"
+            "name": "Letzter Abruf"
           }
         }
       }

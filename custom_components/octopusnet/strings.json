@@ -18,8 +18,86 @@
       "timeout_connect": "[%key:common::config_flow::error::timeout_connect%]"
     },
     "abort": {
-      "existing_instance_updated": "Updated existing configuration.",
+      "existing_instance_updated": "Updated existing configuration",
       "already_configured": "[%key:common::config_flow::abort::already_configured_service%]"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "epg": {
+        "state_attributes": {
+          "total": {
+            "name": "Total"
+          },
+          "events": {
+            "name": "Events"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "tuner": {
+        "state_attributes": {
+          "lock": {
+            "name": "Lock",
+            "state": {
+              "true": "[%key:common::state::yes%]",
+              "false": "[%key:common::state::no%]"
+            }
+          },
+          "strength": {
+            "name": "Strength (dBµV)"
+          },
+          "snr": {
+            "name": "SNR (dB)"
+          },
+          "quality": {
+            "name": "Quality"
+          },
+          "level": {
+            "name": "Level"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "stream": {
+        "state_attributes": {
+          "input": {
+            "name": "Input"
+          },
+          "packets": {
+            "name": "Packets"
+          },
+          "bytes": {
+            "name": "Bytes"
+          },
+          "client": {
+            "name": "Client"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      }
+    },
+    "sensor": {
+      "fanspeed": {
+        "state_attributes": {
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "temperature": {
+        "state_attributes": {
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      }
     }
   }
 }
