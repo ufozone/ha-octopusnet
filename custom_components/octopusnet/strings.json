@@ -25,6 +25,7 @@
   "entity": {
     "binary_sensor": {
       "epg": {
+        "name": "EPG",
         "state_attributes": {
           "total": {
             "name": "Total"
@@ -38,10 +39,8 @@
         }
       },
       "tuner": {
+        "name": "Tuner",
         "state_attributes": {
-          "count": {
-            "name": "Count"
-          },
           "lock": {
             "name": "Lock",
             "state": {
@@ -67,6 +66,7 @@
         }
       },
       "stream": {
+        "name": "Stream",
         "state_attributes": {
           "input": {
             "name": "Input"
@@ -88,6 +88,7 @@
     },
     "sensor": {
       "fanspeed": {
+        "name": "Fan speed",
         "state_attributes": {
           "last_pull": {
             "name": "Last pull"
@@ -95,7 +96,55 @@
         }
       },
       "temperature": {
+        "name": "[%key:component::sensor::entity_component::temperature::name%]",
         "state_attributes": {
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "tuner": {
+        "name": "Tuner",
+        "state_attributes": {
+          "lock": {
+            "name": "Lock",
+            "state": {
+              "true": "[%key:common::state::yes%]",
+              "false": "[%key:common::state::no%]"
+            }
+          },
+          "strength": {
+            "name": "Strength (dBµV)"
+          },
+          "snr": {
+            "name": "SNR (dB)"
+          },
+          "quality": {
+            "name": "Quality"
+          },
+          "level": {
+            "name": "Level"
+          },
+          "last_pull": {
+            "name": "Last pull"
+          }
+        }
+      },
+      "stream": {
+        "name": "Stream",
+        "state_attributes": {
+          "input": {
+            "name": "Input"
+          },
+          "packets": {
+            "name": "Packets"
+          },
+          "bytes": {
+            "name": "Bytes"
+          },
+          "client": {
+            "name": "Client"
+          },
           "last_pull": {
             "name": "Last pull"
           }

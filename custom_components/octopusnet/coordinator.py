@@ -27,7 +27,6 @@ from .const import (
     ATTR_TOTAL,
     ATTR_EVENTS,
     ATTR_TUNER,
-    ATTR_COUNT,
     ATTR_LOCK,
     ATTR_STRENGTH,
     ATTR_SNR,
@@ -95,13 +94,17 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 },
             }
             _tuner_index = 1
+            _tuner_total_lock = False
             _tuner_total_count = _tuner_total_strength = _tuner_total_snr = _tuner_total_quality = _tuner_total_level = 0
             _tuner_status = await self.client.async_get_tuner_status()
             for _tuner in _tuner_status:
                 _tuner_key = f"{ATTR_TUNER}_{_tuner_index}"
                 _tuner_state = _tuner.get("Status") == "Active"
+                _tuner_lock = _tuner.get("Lock", False)
                 _tuner_strength = _tuner_snr = _tuner_quality = _tuner_level = 0
-                if _tuner_state is True:
+                if _tuner_state:
+                    if _tuner_lock:
+                        _tuner_total_lock = True
                     _tuner_strength = ((int(_tuner.get("Strength", 0)) + 108750) / 1000)
                     _tuner_snr = (int(_tuner.get("SNR", 0)) / 1000)
                     _tuner_quality = _tuner.get("Quality", 0)
@@ -115,7 +118,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _data[_tuner_key] = {
                     ATTR_STATE: _tuner_state,
                     ATTR_EXTRA_STATE_ATTRIBUTES: {
-                        ATTR_LOCK: _tuner.get("Lock", False),
+                        ATTR_LOCK: _tuner_lock,
                         ATTR_STRENGTH: _tuner_strength,
                         ATTR_SNR: _tuner_snr,
                         ATTR_QUALITY: _tuner_quality,
@@ -131,9 +134,9 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _tuner_total_level = (_tuner_total_level / _tuner_total_count)
 
             _data[ATTR_TUNER] = {
-                ATTR_STATE: True if _tuner_total_count > 0 else False,
+                ATTR_STATE: _tuner_total_count,
                 ATTR_EXTRA_STATE_ATTRIBUTES: {
-                    ATTR_COUNT: _tuner_total_count,
+                    ATTR_LOCK: _tuner_total_lock,
                     ATTR_STRENGTH: _tuner_total_strength,
                     ATTR_SNR: _tuner_total_snr,
                     ATTR_QUALITY: _tuner_total_quality,
@@ -143,7 +146,8 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
 
             _stream_index = 1
             _stream_total_state = False
-            _stream_total_input = _stream_total_packets = _stream_total_bytes = _stream_total_clients = 0
+            _stream_total_input = _stream_total_packets = _stream_total_bytes = 0
+            _stream_total_clients = []
             _stream_status = await self.client.async_get_stream_status()
             for _stream in _stream_status:
                 _stream_key = f"{ATTR_STREAM}_{_stream_index}"
@@ -158,7 +162,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _stream_total_packets += _stream_packets
                 _stream_total_bytes += _stream_bytes
                 if _stream_client:
-                    _stream_total_clients += len(_stream_client.split(","))
+                    _stream_total_clients = _stream_total_clients + _stream_client.split(" ")
 
                 _data[_stream_key] = {
                     ATTR_STATE: _stream_state,
@@ -172,12 +176,12 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _stream_index = _stream_index + 1
 
             _data[ATTR_STREAM] = {
-                ATTR_STATE: _stream_total_state,
+                ATTR_STATE: len(_stream_total_clients),
                 ATTR_EXTRA_STATE_ATTRIBUTES: {
                     ATTR_INPUT: _stream_total_input,
                     ATTR_PACKETS: _stream_total_packets,
                     ATTR_BYTES: _stream_total_bytes,
-                    ATTR_CLIENT: _stream_total_clients,
+                    ATTR_CLIENT: " ".join([str(v) for v in _stream_total_clients]),
                 },
             }
             self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)

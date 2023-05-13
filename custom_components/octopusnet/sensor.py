@@ -6,6 +6,7 @@ from homeassistant.const import (
     CONF_HOST,
     REVOLUTIONS_PER_MINUTE,
     UnitOfTemperature,
+    UnitOfInformation,
     ATTR_TEMPERATURE,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -13,12 +14,15 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
+    SensorStateClass,
 )
 from homeassistant.helpers.entity import Entity
 
 from .const import (
     DOMAIN,
     ATTR_FANSPEED,
+    ATTR_TUNER,
+    ATTR_STREAM,
 )
 from .coordinator import OctopusNetDataUpdateCoordinator
 from .entity import OctopusNetEntity
@@ -34,17 +38,40 @@ async def async_setup_entry(
     entity_descriptions = [
         SensorEntityDescription(
             key=ATTR_FANSPEED,
-            device_class=SensorDeviceClass.SPEED,
+            translation_key=ATTR_FANSPEED,
+            icon="mdi:fan",
             native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
             unit_of_measurement=REVOLUTIONS_PER_MINUTE,
-            translation_key=ATTR_FANSPEED,
+            device_class=SensorDeviceClass.SPEED,
+            state_class=SensorStateClass.MEASUREMENT,
         ),
         SensorEntityDescription(
             key=ATTR_TEMPERATURE,
-            device_class=SensorDeviceClass.TEMPERATURE,
+            translation_key=ATTR_TEMPERATURE,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key=ATTR_TEMPERATURE,
+            device_class=SensorDeviceClass.TEMPERATURE,
+            state_class=SensorStateClass.MEASUREMENT,
+        ),
+        SensorEntityDescription(
+            key=ATTR_TUNER,
+            translation_key=ATTR_TUNER,
+            icon="mdi:satellite-uplink",
+            native_unit_of_measurement=None,
+            suggested_unit_of_measurement=None,
+            suggested_display_precision=0,
+            device_class=None,
+            state_class=SensorStateClass.MEASUREMENT,
+        ),
+        SensorEntityDescription(
+            key=ATTR_STREAM,
+            translation_key=ATTR_STREAM,
+            icon="mdi:monitor-arrow-down",
+            native_unit_of_measurement=None,
+            suggested_unit_of_measurement=None,
+            suggested_display_precision=0,
+            device_class=None,
+            state_class=SensorStateClass.MEASUREMENT,
         ),
     ]
 
