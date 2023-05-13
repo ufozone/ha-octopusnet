@@ -6,7 +6,6 @@ from homeassistant.const import (
     CONF_HOST,
     REVOLUTIONS_PER_MINUTE,
     UnitOfTemperature,
-    UnitOfInformation,
     ATTR_TEMPERATURE,
 )
 from homeassistant.config_entries import ConfigEntry
