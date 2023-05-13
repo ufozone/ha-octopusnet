@@ -15,6 +15,7 @@ MANUFACTURER = "Digital Devices"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
+    Platform.BUTTON,
     Platform.SENSOR,
 ]
 
@@ -26,6 +27,8 @@ CONF_STREAM_COUNT = "stream_count"
 ATTR_FANSPEED = "fanspeed"
 ATTR_EXTRA_STATE_ATTRIBUTES = "extra_state_attributes"
 ATTR_EPG = "epg"
+ATTR_EPG_SCAN = "epg_scan"
+ATTR_REBOOT = "reboot"
 ATTR_TOTAL = "total"
 ATTR_EVENTS = "events"
 ATTR_TUNER = "tuner"
