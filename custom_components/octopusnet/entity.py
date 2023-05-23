@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from homeassistant.core import callback
 from homeassistant.const import (
+    ATTR_CONFIGURATION_URL,
     ATTR_NAME,
     ATTR_IDENTIFIERS,
     ATTR_MANUFACTURER,
@@ -23,6 +24,8 @@ from .coordinator import OctopusNetDataUpdateCoordinator
 
 class OctopusNetEntity(CoordinatorEntity):
     """Digital Devices Octopus NET class."""
+
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -60,14 +63,6 @@ class OctopusNetEntity(CoordinatorEntity):
         return self.coordinator.data.get(self._entity_key, {}).get(attr, default_value)
 
     @property
-    def name(self) -> str:
-        """Return the name of the entity."""
-        if self._entity_key:
-            _title = self._entity_key.capitalize().replace("_", " ")
-            return f"{self._host} {_title}"
-        return self._host
-
-    @property
     def unique_id(self) -> str:
         """Return the unique ID of the sensor."""
         return self._unique_id
@@ -86,6 +81,7 @@ class OctopusNetEntity(CoordinatorEntity):
             },
             ATTR_NAME: self._host,
             ATTR_MANUFACTURER: MANUFACTURER,
+            ATTR_CONFIGURATION_URL: self.coordinator.client._endpoint,
         }
 
     @property
