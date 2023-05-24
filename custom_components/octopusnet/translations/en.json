@@ -25,7 +25,7 @@
   "entity": {
     "binary_sensor": {
       "epg": {
-        "name": "{entity_name} EPG",
+        "name": "EPG",
         "state_attributes": {
           "total": {
             "name": "Total"
@@ -39,7 +39,7 @@
         }
       },
       "tuner": {
-        "name": "{entity_name} Tuner",
+        "name": "Tuner",
         "state_attributes": {
           "lock": {
             "name": "Lock",
@@ -66,7 +66,7 @@
         }
       },
       "stream": {
-        "name": "{entity_name} Stream",
+        "name": "Stream",
         "state_attributes": {
           "input": {
             "name": "Input"
@@ -86,9 +86,27 @@
         }
       }
     },
+    "button": {
+      "reboot": {
+        "name": "Reboot",
+        "state_attributes": {
+          "last_pull": {
+            "name": "Letzter Abruf"
+          }
+        }
+      },
+      "epg_scan": {
+        "name": "EPG scan",
+        "state_attributes": {
+          "last_pull": {
+            "name": "Letzter Abruf"
+          }
+        }
+      }
+    },
     "sensor": {
       "fanspeed": {
-        "name": "{entity_name} Fan speed",
+        "name": "Fan speed",
         "state_attributes": {
           "last_pull": {
             "name": "Last pull"
@@ -96,7 +114,7 @@
         }
       },
       "temperature": {
-        "name": "{entity_name} Temperature",
+        "name": "Temperature",
         "state_attributes": {
           "last_pull": {
             "name": "Last pull"
@@ -104,7 +122,7 @@
         }
       },
       "tuner": {
-        "name": "{entity_name} Tuners",
+        "name": "Tuners",
         "state_attributes": {
           "lock": {
             "name": "Lock",
@@ -131,7 +149,7 @@
         }
       },
       "stream": {
-        "name": "{entity_name} Streams",
+        "name": "Streams",
         "state_attributes": {
           "input": {
             "name": "Input"

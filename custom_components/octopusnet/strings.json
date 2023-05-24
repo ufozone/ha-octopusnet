@@ -86,6 +86,24 @@
         }
       }
     },
+    "button": {
+      "reboot": {
+        "name": "Reboot",
+        "state_attributes": {
+          "last_pull": {
+            "name": "Letzter Abruf"
+          }
+        }
+      },
+      "epg_scan": {
+        "name": "EPG scan",
+        "state_attributes": {
+          "last_pull": {
+            "name": "Letzter Abruf"
+          }
+        }
+      }
+    },
     "sensor": {
       "fanspeed": {
         "name": "Fan speed",
