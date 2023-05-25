@@ -44,6 +44,9 @@ async def async_setup_entry(
             BinarySensorEntityDescription(
                 key=f"{ATTR_TUNER}_{i}",
                 translation_key=ATTR_TUNER,
+                translation_placeholders={
+                    "index": i,
+                },
                 device_class=BinarySensorDeviceClass.RUNNING,
                 entity_registry_enabled_default=False,
             )
@@ -53,6 +56,9 @@ async def async_setup_entry(
             BinarySensorEntityDescription(
                 key=f"{ATTR_STREAM}_{i}",
                 translation_key=ATTR_STREAM,
+                translation_placeholders={
+                    "index": i,
+                },
                 device_class=BinarySensorDeviceClass.RUNNING,
                 entity_registry_enabled_default=False,
             )
