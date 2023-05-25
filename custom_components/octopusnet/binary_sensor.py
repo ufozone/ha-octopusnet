@@ -1,4 +1,4 @@
-"""Digital Devices Octopus NET sensor platform."""
+"""Digital Devices Octopus NET binary sensor platform."""
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
@@ -30,7 +30,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: Entity,
 ) -> None:
-    """Do setup sensors from a config entry created in the integrations UI."""
+    """Do setup binary sensors from a config entry created in the integrations UI."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     entity_descriptions = [
         BinarySensorEntityDescription(
@@ -86,7 +86,7 @@ class OctopusNetBinarySensor(OctopusNetEntity, BinarySensorEntity):
         host: str,
         entity_description: BinarySensorEntityDescription,
     ) -> None:
-        """Initialize the sensor class."""
+        """Initialize the binary sensor class."""
         super().__init__(
             coordinator=coordinator,
             host=host,

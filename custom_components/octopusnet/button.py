@@ -45,7 +45,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: Entity,
 ) -> None:
-    """Do setup sensors from a config entry created in the integrations UI."""
+    """Do setup buttons from a config entry created in the integrations UI."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     entity_descriptions = [
         OctopusNetButtonDescription(
@@ -75,7 +75,7 @@ async def async_setup_entry(
 
 
 class OctopusNetButton(OctopusNetEntity, ButtonEntity):
-    """Representation of a Digital Devices Octopus NET sensor."""
+    """Representation of a Digital Devices Octopus NET button."""
 
     def __init__(
         self,
@@ -83,11 +83,11 @@ class OctopusNetButton(OctopusNetEntity, ButtonEntity):
         host: str,
         entity_description: OctopusNetButtonDescription,
     ) -> None:
-        """Initialize the sensor class."""
+        """Initialize the button class."""
         super().__init__(
             coordinator=coordinator,
             host=host,
-            entity_type="sensor",
+            entity_type="button",
             entity_key=entity_description.key,
         )
         self.entity_description = entity_description
