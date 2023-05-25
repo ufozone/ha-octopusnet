@@ -30,57 +30,74 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
 
 ## Available components 
 
-### General
-
-* all entities
-
-    ```
-    attributes: 
-    last_poll
-    ```
-
 ### Binary Sensors
 
 * epg
 
     ```
     attributes: 
-    total, events
+    total, events, last_poll
     ```
 
 * tuner
 
     ```
     attributes: 
-    count, avg. strength, avg. snr, avg. quality, avg. level
+    count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
     ```
 
 * tuner_{n}
 
     ```
     attributes: 
-    lock, strength, snr, quality, level
+    lock, strength, snr, quality, level, last_poll
     ```
 
 * stream
 
     ```
     attributes: 
-    total input, total packets, total bytes, total clients
+    total input, total packets, total bytes, total clients, last_poll
     ```
 
 * stream_{n}
 
     ```
     attributes: 
-    input, packets, bytes, client
+    input, packets, bytes, client, last_poll
+    ```
+
+### Buttons
+
+* reboot
+
+    ```
+    attributes: 
+    last_poll
+    ```
+
+* epg_scan
+
+    ```
+    attributes: 
+    last_poll
     ```
 
 ### Sensors
 
 * fanspeed
 
+    ```
+    attributes: 
+    last_poll
+    ```
+
 * temperature
+
+    ```
+    attributes: 
+    last_poll
+    ```
 
 ### Services
 
