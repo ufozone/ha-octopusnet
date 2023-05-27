@@ -43,10 +43,8 @@ async def async_setup_entry(
         entity_descriptions.append(
             BinarySensorEntityDescription(
                 key=f"{ATTR_TUNER}_{i}",
+                name=f"Tuner {i}",
                 translation_key=ATTR_TUNER,
-                translation_placeholders={
-                    "index": i,
-                },
                 device_class=BinarySensorDeviceClass.RUNNING,
                 entity_registry_enabled_default=False,
             )
@@ -55,10 +53,8 @@ async def async_setup_entry(
         entity_descriptions.append(
             BinarySensorEntityDescription(
                 key=f"{ATTR_STREAM}_{i}",
+                name=f"Stream {i}",
                 translation_key=ATTR_STREAM,
-                translation_placeholders={
-                    "index": i,
-                },
                 device_class=BinarySensorDeviceClass.RUNNING,
                 entity_registry_enabled_default=False,
             )
@@ -75,6 +71,7 @@ async def async_setup_entry(
         ],
         update_before_add=True,
     )
+
 
 
 class OctopusNetBinarySensor(OctopusNetEntity, BinarySensorEntity):

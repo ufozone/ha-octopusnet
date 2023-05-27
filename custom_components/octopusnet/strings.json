@@ -39,7 +39,6 @@
         }
       },
       "tuner": {
-        "name": "Tuner {index}",
         "state_attributes": {
           "lock": {
             "name": "Lock",
@@ -66,7 +65,6 @@
         }
       },
       "stream": {
-        "name": "Stream {index}",
         "state_attributes": {
           "input": {
             "name": "Input"
