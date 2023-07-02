@@ -4,7 +4,6 @@ from __future__ import annotations
 from datetime import (
     timedelta,
     datetime,
-    timezone,
 )
 
 from homeassistant.core import HomeAssistant
@@ -184,7 +183,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_CLIENT: " ".join([str(v) for v in _stream_total_clients]),
                 },
             }
-            self._last_pull = datetime.utcnow().replace(tzinfo=timezone.utc)
+            self._last_pull = datetime.utcnow().replace(tzinfo=datetime.UTC)
             _available = True
         except Exception as exception:
             LOGGER.exception(exception)
