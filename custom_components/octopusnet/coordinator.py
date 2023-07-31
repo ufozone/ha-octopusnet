@@ -185,6 +185,8 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             }
             self._last_pull = datetime.utcnow().replace(tzinfo=datetime.UTC)
             _available = True
+        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+            LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -202,6 +204,8 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command reboot to device."""
         try:
             return await self.client.async_start_reboot()
+        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+            LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
 
@@ -211,5 +215,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command epg_scan to device."""
         try:
             return await self.client.async_epg_scan()
+        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+            LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
