@@ -37,7 +37,12 @@ from .const import (
     ATTR_AVAILABLE,
     ATTR_LAST_PULL,
 )
-from .octopusnet import OctopusNetClient
+from .octopusnet import (
+    OctopusNetClient,
+    OctopusNetClientTimeoutError,
+    OctopusNetClientCommunicationError,
+    OctopusNetClientAuthenticationError,
+)
 
 
 # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
