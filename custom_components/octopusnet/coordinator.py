@@ -1,10 +1,7 @@
 """DataUpdateCoordinator for Digital Devices Octopus NET."""
 from __future__ import annotations
 
-from datetime import (
-    timedelta,
-    datetime,
-)
+from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
@@ -15,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
 )
+import homeassistant.util.dt as dt_util
 
 from .const import (
     DOMAIN,
@@ -183,7 +181,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                     ATTR_CLIENT: " ".join([str(v) for v in _stream_total_clients]),
                 },
             }
-            self._last_pull = datetime.utcnow().replace(tzinfo=datetime.UTC)
+            self._last_pull = dt_util.now()
             _available = True
         except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
             LOGGER.error(str(exception))
