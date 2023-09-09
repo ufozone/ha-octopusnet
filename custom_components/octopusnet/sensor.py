@@ -41,7 +41,6 @@ async def async_setup_entry(
             icon="mdi:fan",
             native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
             unit_of_measurement=REVOLUTIONS_PER_MINUTE,
-            device_class=SensorDeviceClass.SPEED,
             state_class=SensorStateClass.MEASUREMENT,
         ),
         SensorEntityDescription(
