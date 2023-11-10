@@ -89,7 +89,7 @@
         "name": "Reboot",
         "state_attributes": {
           "last_pull": {
-            "name": "Letzter Abruf"
+            "name": "Last pull"
           }
         }
       },
@@ -97,7 +97,7 @@
         "name": "EPG scan",
         "state_attributes": {
           "last_pull": {
-            "name": "Letzter Abruf"
+            "name": "Last pull"
           }
         }
       }

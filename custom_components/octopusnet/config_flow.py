@@ -36,8 +36,10 @@ class OctopusNetConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_LOCAL_PUSH
 
-    data: dict[str, any] | None
-    options: dict[str, any] | None
+    def __init__(self) -> None:
+        """Initialize the Digital Devices Octopus NET flow."""
+        self.data: dict[str, any] | None = None
+        self.options: dict[str, any] | None = None
 
     async def async_step_user(
         self,
