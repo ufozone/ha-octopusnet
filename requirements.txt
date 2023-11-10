@@ -1,9 +1,5 @@
 pip>=21.0,<23.2
-<<<<<<< HEAD
 colorlog==6.7.0
-=======
-colorlog==6.7.0
->>>>>>> branch 'main' of https://github.com/ufozone/ha-octopusnet.git
 ruff==0.0.270
 pydocstyle==6.3.0
 isort==5.12.0
