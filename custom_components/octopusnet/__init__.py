@@ -9,6 +9,9 @@ from homeassistant.const import (
     CONF_VERIFY_SSL,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers import (
+    config_validation as cv,
+)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
@@ -21,6 +24,7 @@ from .octopusnet import (
 from .services import async_setup_services
 from .coordinator import OctopusNetDataUpdateCoordinator
 
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up Digital Devices Octopus NET component."""
