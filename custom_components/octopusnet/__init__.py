@@ -31,37 +31,37 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator = OctopusNetDataUpdateCoordinator(
+    hass.data[DOMAIN][config_entry.entry_id] = coordinator = OctopusNetDataUpdateCoordinator(
         hass=hass,
-        entry=entry,
+        config_entry=config_entry,
         client=OctopusNetClient(
-            host=entry.data[CONF_HOST],
-            port=entry.data[CONF_PORT],
-            tls=entry.data[CONF_SSL],
-            verify_ssl=entry.data[CONF_VERIFY_SSL],
+            host=config_entry.data[CONF_HOST],
+            port=config_entry.data[CONF_PORT],
+            tls=config_entry.data[CONF_SSL],
+            verify_ssl=config_entry.data[CONF_VERIFY_SSL],
             session=async_get_clientsession(hass),
         ),
     )
     await coordinator.async_config_entry_first_refresh()
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+    await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
+    config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
 
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+    if unload_ok := await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS):
         # Remove config entry from domain.
-        hass.data[DOMAIN].pop(entry.entry_id)
+        hass.data[DOMAIN].pop(config_entry.entry_id)
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await async_unload_entry(hass, config_entry)
+    await async_setup_entry(hass, config_entry)

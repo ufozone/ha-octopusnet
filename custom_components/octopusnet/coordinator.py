@@ -52,7 +52,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
-        entry: ConfigEntry,
+        config_entry: ConfigEntry,
         client: OctopusNetClient,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
@@ -63,7 +63,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=update_interval,
         )
-        self.entry = entry
+        self.config_entry = config_entry
         self.client = client
         self._last_pull = None
 
