@@ -4,7 +4,9 @@ from __future__ import annotations
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
     CONF_HOST,
+    CONF_PASSWORD,
     CONF_PORT,
+    CONF_USERNAME,
     CONF_SSL,
     CONF_VERIFY_SSL,
 )
@@ -18,8 +20,8 @@ from .const import (
     DOMAIN,
     PLATFORMS,
 )
-from .octopusnet import (
-    OctopusNetClient,
+from .api import (
+    OctopusNetApiClient,
 )
 from .services import async_setup_services
 from .coordinator import OctopusNetDataUpdateCoordinator
@@ -41,11 +43,13 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     hass.data[DOMAIN][config_entry.entry_id] = coordinator = OctopusNetDataUpdateCoordinator(
         hass=hass,
         config_entry=config_entry,
-        client=OctopusNetClient(
-            host=config_entry.data[CONF_HOST],
-            port=config_entry.data[CONF_PORT],
-            tls=config_entry.data[CONF_SSL],
-            verify_ssl=config_entry.data[CONF_VERIFY_SSL],
+        client=OctopusNetApiClient(
+            host=config_entry.data.get(CONF_HOST),
+            username=config_entry.data.get(CONF_USERNAME, ""),
+            password=config_entry.data.get(CONF_PASSWORD, ""),
+            port=config_entry.data.get(CONF_PORT),
+            tls=config_entry.data.get(CONF_SSL),
+            verify_ssl=config_entry.data.get(CONF_VERIFY_SSL),
             session=async_get_clientsession(hass),
         ),
     )

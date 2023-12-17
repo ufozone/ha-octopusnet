@@ -37,11 +37,11 @@ from .const import (
     ATTR_AVAILABLE,
     ATTR_LAST_PULL,
 )
-from .octopusnet import (
-    OctopusNetClient,
-    OctopusNetClientTimeoutError,
-    OctopusNetClientCommunicationError,
-    OctopusNetClientAuthenticationError,
+from .api import (
+    OctopusNetApiClient,
+    OctopusNetApiTimeoutError,
+    OctopusNetApiCommunicationError,
+    OctopusNetApiAuthenticationError,
 )
 
 
@@ -53,7 +53,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        client: OctopusNetClient,
+        client: OctopusNetApiClient,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
         """Initialize."""
@@ -188,7 +188,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             }
             self._last_pull = dt_util.now()
             _available = True
-        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
@@ -207,7 +207,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command reboot to device."""
         try:
             return await self.client.async_start_reboot()
-        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
@@ -218,7 +218,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command epg_scan to device."""
         try:
             return await self.client.async_epg_scan()
-        except (OctopusNetClientTimeoutError, OctopusNetClientCommunicationError, OctopusNetClientAuthenticationError) as exception:
+        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)

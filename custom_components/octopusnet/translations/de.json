@@ -5,6 +5,8 @@
         "description": "Richte deine Octopus NET-Instanz ein, sodass eine Überwachung möglich ist.",
         "data": {
           "host": "Host",
+          "username": "Benutzername",
+          "password": "Passwort",
           "port": "Port",
           "ssl": "Verwendet ein SSL-Zertifikat",
           "verify_ssl": "SSL-Zertifikat überprüfen"
@@ -13,6 +15,7 @@
     },
     "error": {
       "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Authentifizierung",
       "invalid_host": "Ungültiger Hostname oder IP-Adresse",
       "unknown": "Unerwarteter Fehler",
       "timeout_connect": "Zeitüberschreitung beim Verbindungsaufbau"

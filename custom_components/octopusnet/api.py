@@ -1,4 +1,4 @@
-"""Digital Devices Octopus NET Client."""
+"""Digital Devices Octopus NET API Client."""
 from __future__ import annotations
 
 import asyncio
@@ -8,29 +8,34 @@ import async_timeout
 
 from homeassistant.helpers.aiohttp_client import HassClientResponse
 
+from .const import (
+    LOGGER,
+)
 
-class OctopusNetClientError(Exception):
+class OctopusNetApiError(Exception):
     """Exception to indicate a general client error."""
 
 
-class OctopusNetClientTimeoutError(OctopusNetClientError):
+class OctopusNetApiTimeoutError(OctopusNetApiError):
     """Exception to indicate a timeout error."""
 
 
-class OctopusNetClientCommunicationError(OctopusNetClientError):
+class OctopusNetApiCommunicationError(OctopusNetApiError):
     """Exception to indicate a communication error."""
 
 
-class OctopusNetClientAuthenticationError(OctopusNetClientError):
+class OctopusNetApiAuthenticationError(OctopusNetApiError):
     """Exception to indicate an authentication error."""
 
 
-class OctopusNetClient:
+class OctopusNetApiClient:
     """Octopus NET Client."""
 
     def __init__(
         self,
         host: str,
+        username: str,
+        password: str,
         port: int,
         tls: bool,
         verify_ssl: bool,
@@ -38,6 +43,8 @@ class OctopusNetClient:
     ) -> None:
         """Initialize."""
         self._host = host
+        self._username = username
+        self._password = password
         self._port = port
         self._tls = tls
         self._verify_ssl = verify_ssl
@@ -63,26 +70,25 @@ class OctopusNetClient:
                     headers=headers,
                     json=data,
                 )
+                LOGGER.debug(response)
                 if response.status in (401, 403):
-                    raise OctopusNetClientAuthenticationError(
+                    raise OctopusNetApiAuthenticationError(
                         "Invalid credentials",
-                    )
-                if response.status in (404, 500, 501, 502, 503, 504):
-                    raise OctopusNetClientError(
-                        "Not supported",
                     )
                 response.raise_for_status()
                 return response
+        except OctopusNetApiAuthenticationError as exception:
+            raise exception
         except asyncio.TimeoutError as exception:
-            raise OctopusNetClientTimeoutError(
+            raise OctopusNetApiTimeoutError(
                 "Timeout error fetching information"
             ) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:  # pylint: disable=broad-except
-            raise OctopusNetClientError(
+            raise OctopusNetApiError(
                 "Something really wrong happened!"
             ) from exception
 
@@ -96,10 +102,12 @@ class OctopusNetClient:
             response_text = await response.text()
             response_lines = response_text.splitlines()
             if len(response_lines) < 3:
-                raise OctopusNetClientCommunicationError()
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
             return float(response_lines[len(response_lines) - 1])
         except aiohttp.ContentTypeError as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:
@@ -116,10 +124,12 @@ class OctopusNetClient:
                 content_type=None,
             )
             if "speed" not in response_json:
-                raise OctopusNetClientCommunicationError()
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
             return int(response_json.get("speed", 0))
         except aiohttp.ContentTypeError as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:
@@ -136,16 +146,18 @@ class OctopusNetClient:
                 content_type=None,
             )
             if "status" not in response_json:
-                raise OctopusNetClientCommunicationError()
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
             return response_json
         except aiohttp.ContentTypeError as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:
             raise exception
 
-    async def async_get_tuner_status(self) -> dict:
+    async def async_get_tuner_status(self) -> list:
         """Get current tuner status."""
         try:
             response = await self._async_request_wrapper(
@@ -156,16 +168,18 @@ class OctopusNetClient:
                 content_type=None,
             )
             if "TunerList" not in response_json:
-                raise OctopusNetClientCommunicationError()
-            return response_json.get("TunerList", {})
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
+            return response_json.get("TunerList", [])
         except aiohttp.ContentTypeError as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:
             raise exception
 
-    async def async_get_stream_status(self) -> dict:
+    async def async_get_stream_status(self) -> list:
         """Get current stream status."""
         try:
             response = await self._async_request_wrapper(
@@ -176,10 +190,34 @@ class OctopusNetClient:
                 content_type=None,
             )
             if "StreamList" not in response_json:
-                raise OctopusNetClientCommunicationError()
-            return response_json.get("StreamList", {})
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
+            return response_json.get("StreamList", [])
         except aiohttp.ContentTypeError as exception:
-            raise OctopusNetClientCommunicationError(
+            raise OctopusNetApiCommunicationError(
+                "Error fetching information"
+            ) from exception
+        except Exception as exception:
+            raise exception
+
+    async def async_get_channels(self) -> list:
+        """Get channel list."""
+        try:
+            response = await self._async_request_wrapper(
+                method="POST",
+                url=f"{self._endpoint}/channels/data",
+            )
+            response_json = await response.json(
+                content_type=None,
+            )
+            if "data" not in response_json:
+                raise OctopusNetApiCommunicationError(
+                    "Invalid response",
+                )
+            return response_json.get("data", [])
+        except aiohttp.ContentTypeError as exception:
+            raise OctopusNetApiCommunicationError(
                 "Error fetching information"
             ) from exception
         except Exception as exception:

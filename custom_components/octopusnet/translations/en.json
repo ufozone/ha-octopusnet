@@ -5,6 +5,8 @@
         "description": "Set up your Octopus NET instance to allow monitoring.",
         "data": {
           "host": "Host",
+          "username": "Username",
+          "password": "Password",
           "port": "Port",
           "ssl": "Uses an SSL certificate",
           "verify_ssl": "Verify SSL certificate"
@@ -13,6 +15,7 @@
     },
     "error": {
       "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
       "invalid_host": "Invalid hostname or IP address",
       "unknown": "Unexpected error",
       "timeout_connect": "Timeout establishing connection"
