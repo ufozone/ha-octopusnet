@@ -3,12 +3,9 @@ from __future__ import annotations
 
 from homeassistant.core import callback
 from homeassistant.const import (
-    ATTR_CONFIGURATION_URL,
-    ATTR_NAME,
-    ATTR_IDENTIFIERS,
-    ATTR_MANUFACTURER,
     ATTR_STATE,
 )
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -47,6 +44,14 @@ class OctopusNetEntity(CoordinatorEntity):
             self._unique_id = slugify(f"{self._host}")
 
         self.entity_id = f"{entity_type}.{self._unique_id}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={
+                (DOMAIN, self._host)
+            },
+            name=self._host,
+            manufacturer=MANUFACTURER,
+            configuration_url=self.coordinator.client._endpoint,
+        )
 
     def _get_state(
         self,
@@ -71,18 +76,6 @@ class OctopusNetEntity(CoordinatorEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.data.get(ATTR_AVAILABLE)
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            ATTR_IDENTIFIERS: {
-                (DOMAIN, self._host)
-            },
-            ATTR_NAME: self._host,
-            ATTR_MANUFACTURER: MANUFACTURER,
-            ATTR_CONFIGURATION_URL: self.coordinator.client._endpoint,
-        }
 
     @property
     def extra_state_attributes(self) -> dict[str, any]:
