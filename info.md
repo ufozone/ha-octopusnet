@@ -20,14 +20,52 @@ Latest -
 Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant. Octopus NET with firmware `octonet-pro-2.0.0` or higher are supported.
 
 ## Installation
-* First: This is not a Home Assistant Add-On. It's a custom component.
-* There are three ways to install:
-    * First you can download the folder custom_component and copy it into your Home-Assistant config folder.
-    * Second option is to install HACS (Home Assistant Custom Component Store) and visit the HACS _Integrations_ pane and add `https://github.com/ufozone/ha-octopusnet.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/). You'll then be able to install it through the _Integrations_ pane.
-    * ~~Third option is to install HACS (Home Assistant Custom Component Store) and select "Digital Devices Octopus NET Monitoring" from the Integrations catalog.~~
-* Restart Home Assistant after installation.
-* Make sure that you refresh your browser window too.
-* Use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "Digital Devices Octopus NET Monitoring".
+
+Requires Home Assistant 2023.11.0 or newer.
+
+### Installation through HACS
+
+Installation using Home Assistant Community Store (HACS) is recommended.
+
+1. If HACS is not installed, follow HACS installation and configuration at https://hacs.xyz/.
+
+2. Visit HACS _Integrations_ pane and add `https://github.com/ufozone/ha-octopusnet.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/).
+
+3. Click the button below or visit the HACS _Integrations_ pane and search for "Digital Devices Octopus NET Monitoring".
+
+    [![my_button](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-octopusnet&category=integration)
+
+4. Install the integration.
+
+5. Restart Home Assistant!
+
+6. Make sure that you refresh your browser window too.
+
+### Manual installation
+
+1. Download the `octopusnet.zip` file from the repository [release section](https://github.com/ufozone/ha-octopusnet/releases).
+
+   Do **not** download directly from the `main` branch.
+
+2. Extract and copy the content into the path `/config/custom_components/octopusnet` of your HA installation.
+
+3. Restart Home Assistant!
+
+4. Make sure that you refresh your browser window too.
+
+### Setup integration
+
+Start setup:
+
+* Click this button:
+
+    [![my_button](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=octopusnet)
+
+* Or use the "Add Integration" in Home Assistant, Settings, Devices & Services and select "Digital Devices Octopus NET Monitoring".
+
+## Configuration
+
+* All configuration options are offered from the front end.
 
 ## Available components 
 
