@@ -1,7 +1,6 @@
 """Digital Devices Octopus NET API Client."""
 from __future__ import annotations
 
-import asyncio
 import socket
 import aiohttp
 import async_timeout
