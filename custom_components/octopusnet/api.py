@@ -79,7 +79,7 @@ class OctopusNetApiClient:
                 return response
         except OctopusNetApiAuthenticationError as exception:
             raise exception
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             raise OctopusNetApiTimeoutError(
                 "Timeout error fetching information"
             ) from exception
