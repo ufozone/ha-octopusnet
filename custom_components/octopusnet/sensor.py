@@ -15,7 +15,10 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     DOMAIN,
@@ -42,6 +45,7 @@ async def async_setup_entry(
             native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
             unit_of_measurement=REVOLUTIONS_PER_MINUTE,
             state_class=SensorStateClass.MEASUREMENT,
+            entity_category=EntityCategory.DIAGNOSTIC,
         ),
         SensorEntityDescription(
             key=ATTR_TEMPERATURE,
@@ -50,6 +54,7 @@ async def async_setup_entry(
             unit_of_measurement=UnitOfTemperature.CELSIUS,
             device_class=SensorDeviceClass.TEMPERATURE,
             state_class=SensorStateClass.MEASUREMENT,
+            entity_category=EntityCategory.DIAGNOSTIC,
         ),
         SensorEntityDescription(
             key=ATTR_TUNER,

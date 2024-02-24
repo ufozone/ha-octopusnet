@@ -11,7 +11,10 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     DOMAIN,
@@ -37,6 +40,7 @@ async def async_setup_entry(
             key=ATTR_EPG,
             translation_key=ATTR_EPG,
             device_class=BinarySensorDeviceClass.RUNNING,
+            entity_category=EntityCategory.DIAGNOSTIC,
         ),
     ]
     for i in range(1, config_entry.data[CONF_TUNER_COUNT] + 1):
@@ -46,6 +50,7 @@ async def async_setup_entry(
                 name=f"Tuner {i}",
                 translation_key=ATTR_TUNER,
                 device_class=BinarySensorDeviceClass.RUNNING,
+                entity_category=EntityCategory.DIAGNOSTIC,
                 entity_registry_enabled_default=False,
             )
         )
@@ -56,6 +61,7 @@ async def async_setup_entry(
                 name=f"Stream {i}",
                 translation_key=ATTR_STREAM,
                 device_class=BinarySensorDeviceClass.RUNNING,
+                entity_category=EntityCategory.DIAGNOSTIC,
                 entity_registry_enabled_default=False,
             )
         )

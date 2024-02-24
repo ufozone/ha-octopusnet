@@ -14,7 +14,10 @@ from homeassistant.components.button import (
     ButtonEntity,
     ButtonEntityDescription,
 )
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import (
+    Entity,
+    EntityCategory,
+)
 
 from .const import (
     DOMAIN,
@@ -52,6 +55,7 @@ async def async_setup_entry(
             key=ATTR_REBOOT,
             translation_key=ATTR_REBOOT,
             device_class=ButtonDeviceClass.RESTART,
+            entity_category=EntityCategory.CONFIG,
             press_action=lambda coordinator: coordinator.async_reboot(),
         ),
         OctopusNetButtonDescription(
