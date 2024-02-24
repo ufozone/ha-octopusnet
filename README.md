@@ -140,9 +140,13 @@ Start setup:
 
 ### Services
 
-* epg_scan
+* `octopusnet.epg_scan`
 
-* reboot
+    Start the EPG scan.
+
+* `octopusnet.reboot`
+
+    Reboot the device.
 
 ### Logging
 
