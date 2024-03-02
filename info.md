@@ -1,4 +1,5 @@
 # Digital Devices Octopus NET Monitoring
+
 [![License][license-shield]](LICENSE)
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
@@ -27,7 +28,7 @@ Requires Home Assistant 2023.11.0 or newer.
 
 Installation using Home Assistant Community Store (HACS) is recommended.
 
-1. If HACS is not installed, follow HACS installation and configuration at https://hacs.xyz/.
+1. If HACS is not installed, follow HACS installation and configuration at <https://hacs.xyz/>.
 
 2. Visit HACS _Integrations_ pane and add `https://github.com/ufozone/ha-octopusnet.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/).
 
@@ -67,41 +68,41 @@ Start setup:
 
 * All configuration options are offered from the front end.
 
-## Available components 
+## Available components
 
 ### Binary Sensors
 
 * epg
 
-    ```
+    ```text
     attributes: 
     total, events, last_poll
     ```
 
 * tuner
 
-    ```
+    ```text
     attributes: 
     count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
     ```
 
 * tuner_{n}
 
-    ```
+    ```text
     attributes: 
     lock, strength, snr, quality, level, last_poll
     ```
 
 * stream
 
-    ```
+    ```text
     attributes: 
     total input, total packets, total bytes, total clients, last_poll
     ```
 
 * stream_{n}
 
-    ```
+    ```text
     attributes: 
     input, packets, bytes, client, last_poll
     ```
@@ -110,14 +111,14 @@ Start setup:
 
 * reboot
 
-    ```
+    ```text
     attributes: 
     last_poll
     ```
 
 * epg_scan
 
-    ```
+    ```text
     attributes: 
     last_poll
     ```
@@ -126,14 +127,14 @@ Start setup:
 
 * fanspeed
 
-    ```
+    ```text
     attributes: 
     last_poll
     ```
 
 * temperature
 
-    ```
+    ```text
     attributes: 
     last_poll
     ```
@@ -152,13 +153,12 @@ Start setup:
 
 Set the logging to debug with the following settings in case of problems.
 
-```
+```yaml
 logger:
   default: warn
   logs:
     custom_components.octopusnet: debug
 ```
-
 
 ***
 
