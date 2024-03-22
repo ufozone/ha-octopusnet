@@ -8,15 +8,11 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-Stable -
-[![GitHub Release][stable-release-shield]][releases]
+[![GitHub Release][release-shield]][releases]
+[![issues][issues-shield]][issues-link]
 [![release-badge]][release-workflow]
-
-Latest -
-[![GitHub Release][latest-release-shield]][releases]
 [![validate-badge]][validate-workflow]
 [![lint-badge]][lint-workflow]
-[![issues][issues-shield]][issues-link]
 
 Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant. Octopus NET with firmware `octonet-pro-2.0.0` or higher are supported.
 
@@ -174,12 +170,11 @@ logger:
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
 
+[releases]: https://github.com/ufozone/ha-octopusnet/releases
+[release-shield]: https://img.shields.io/github/v/release/ufozone/ha-octopusnet?style=flat
+
 [issues-shield]: https://img.shields.io/github/issues/ufozone/ha-octopusnet?style=flat
 [issues-link]: https://github.com/ufozone/ha-octopusnet/issues
-
-[releases]: https://github.com/ufozone/ha-octopusnet/releases
-[stable-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-octopusnet?style=flat
-[latest-release-shield]: https://img.shields.io/github/v/release/ufozone/ha-octopusnet?include_prereleases&style=flat
 
 [lint-badge]: https://github.com/ufozone/ha-octopusnet/actions/workflows/lint.yaml/badge.svg
 [lint-workflow]: https://github.com/ufozone/ha-octopusnet/actions/workflows/lint.yaml
