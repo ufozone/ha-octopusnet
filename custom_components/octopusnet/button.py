@@ -60,6 +60,7 @@ async def async_setup_entry(
         ),
         OctopusNetButtonDescription(
             key=ATTR_EPG_SCAN,
+            icon="mdi:cloud-search",
             translation_key=ATTR_EPG_SCAN,
             press_action=lambda coordinator: coordinator.async_epg_scan(),
         ),
