@@ -10,5 +10,5 @@
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/ufozone/ha-octopusnet/issues",
-  "version": "0.3.7"
+  "version": "0.4.1"
 }
