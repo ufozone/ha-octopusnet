@@ -70,70 +70,79 @@ Start setup:
 
 * epg
 
-    ```text
-    attributes: 
-    total, events, last_poll
-    ```
+  Attributes:
+
+  ```text
+  total, events, last_poll
+  ```
 
 * tuner
 
-    ```text
-    attributes: 
-    count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
-    ```
+  Attributes:
+
+  ```text
+  count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
+  ```
 
 * tuner_{n}
 
-    ```text
-    attributes: 
-    lock, strength, snr, quality, level, last_poll
-    ```
+  Attributes:
+
+  ```text
+  lock, strength, snr, quality, level, last_poll
+  ```
 
 * stream
 
-    ```text
-    attributes: 
-    total input, total packets, total bytes, total clients, last_poll
-    ```
+  Attributes:
+
+  ```text
+  total input, total packets, total bytes, total clients, last_poll
+  ```
 
 * stream_{n}
 
-    ```text
-    attributes: 
-    input, packets, bytes, client, last_poll
-    ```
+  Attributes:
+
+  ```text
+  input, packets, bytes, client, last_poll
+  ```
 
 ### Buttons
 
 * reboot
 
-    ```text
-    attributes: 
-    last_poll
-    ```
+  Attributes:
+
+  ```text
+  last_poll
+  ```
 
 * epg_scan
 
-    ```text
-    attributes: 
-    last_poll
-    ```
+  Attributes:
+
+  ```text
+  last_poll
+  ```
 
 ### Sensors
 
 * fanspeed
 
-    ```text
-    attributes: 
-    last_poll
-    ```
+  Attributes:
+
+  ```text
+  last_poll
+  ```
 
 * temperature
 
-    ```text
-    attributes: 
-    last_poll
-    ```
+  Attributes:
+
+  ```text
+  last_poll
+  ```
 
 ### Services
 
