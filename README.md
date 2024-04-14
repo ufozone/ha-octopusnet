@@ -18,7 +18,8 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
 
 ## Installation
 
-Requires Home Assistant 2023.11.0 or newer.
+> [!IMPORTANT]  
+> Requires Home Assistant 2023.11.0 or newer.
 
 ### Installation through HACS
 
