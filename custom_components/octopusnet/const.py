@@ -24,6 +24,7 @@ UPDATE_INTERVAL = 120
 CONF_TUNER_COUNT = "tuner_count"
 CONF_STREAM_COUNT = "stream_count"
 
+ATTR_UPDATE = "update"
 ATTR_FANSPEED = "fanspeed"
 ATTR_EXTRA_STATE_ATTRIBUTES = "extra_state_attributes"
 ATTR_EPG = "epg"
