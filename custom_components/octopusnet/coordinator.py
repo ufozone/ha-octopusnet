@@ -27,9 +27,12 @@ from .const import (
     DOMAIN,
     LOGGER,
     UPDATE_INTERVAL,
+    ATTR_UPDATE,
     ATTR_FANSPEED,
     ATTR_EXTRA_STATE_ATTRIBUTES,
     ATTR_EPG,
+    ATTR_EPG_SCAN,
+    ATTR_REBOOT,
     ATTR_TOTAL,
     ATTR_EVENTS,
     ATTR_TUNER,
@@ -48,9 +51,7 @@ from .const import (
 )
 from .api import (
     OctopusNetApiClient,
-    OctopusNetApiTimeoutError,
-    OctopusNetApiCommunicationError,
-    OctopusNetApiAuthenticationError,
+    OctopusNetApiError,
 )
 
 
@@ -81,8 +82,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             verify_ssl=config_entry.data.get(CONF_VERIFY_SSL),
             session=async_get_clientsession(hass),
         )
-        self._last_pull = None
-
+        self.data = {}
         self._loop = asyncio.get_event_loop()
         self._scheduled_update_listeners: asyncio.TimerHandle | None = None
 
@@ -99,24 +99,113 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Update data via library."""
-        _available = False
-        _data = {}
+        self.data = {
+            ATTR_UPDATE: {
+                ATTR_AVAILABLE: True,
+            },
+            ATTR_FANSPEED: {
+                ATTR_STATE: None,
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_TEMPERATURE: {
+                ATTR_STATE: None,
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_EPG: {
+                ATTR_STATE: None,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_TOTAL: None,
+                    ATTR_EVENTS: None,
+                },
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_EPG_SCAN: {
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_REBOOT: {
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_TUNER: {
+                ATTR_STATE: None,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_LOCK: None,
+                    ATTR_STRENGTH: None,
+                    ATTR_SNR: None,
+                    ATTR_QUALITY: None,
+                    ATTR_LEVEL: None,
+                },
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_STREAM: {
+                ATTR_STATE: None,
+                ATTR_EXTRA_STATE_ATTRIBUTES: {
+                    ATTR_INPUT: None,
+                    ATTR_PACKETS: None,
+                    ATTR_BYTES: None,
+                    ATTR_CLIENT: None,
+                },
+                ATTR_AVAILABLE: False,
+            },
+            ATTR_LAST_PULL: None,
+            ATTR_AVAILABLE: False,
+        }
+
         try:
-            _data[ATTR_FANSPEED] = {
-                ATTR_STATE: await self.client.async_get_fanspeed(),
-            }
-            _data[ATTR_TEMPERATURE] = {
-                ATTR_STATE: await self.client.async_get_temperature(),
-            }
+            self.data.update(
+                {
+                    ATTR_FANSPEED: {
+                        ATTR_STATE: await self.client.async_get_fanspeed(),
+                        ATTR_AVAILABLE: True,
+                    },
+                }
+            )
+        except OctopusNetApiError as exception:
+            LOGGER.error(str(exception))
+        except Exception as exception:
+            LOGGER.exception(exception)
+
+        try:
+            self.data.update(
+                {
+                    ATTR_TEMPERATURE: {
+                        ATTR_STATE: await self.client.async_get_temperature(),
+                        ATTR_AVAILABLE: True,
+                    },
+                    ATTR_REBOOT: {
+                        ATTR_AVAILABLE: True,
+                    },
+                }
+            )
+        except OctopusNetApiError as exception:
+            LOGGER.error(str(exception))
+        except Exception as exception:
+            LOGGER.exception(exception)
+
+        try:
             _epg = await self.client.async_get_epg()
             _epg_state = _epg.get("status") == "active"
-            _data[ATTR_EPG] = {
-                ATTR_STATE: _epg_state,
-                ATTR_EXTRA_STATE_ATTRIBUTES: {
-                    ATTR_TOTAL: _epg.get("total", 0),
-                    ATTR_EVENTS: _epg.get("events", 0),
-                },
-            }
+
+            self.data.update(
+                {
+                    ATTR_EPG: {
+                        ATTR_STATE: _epg_state,
+                        ATTR_EXTRA_STATE_ATTRIBUTES: {
+                            ATTR_TOTAL: _epg.get("total", 0),
+                            ATTR_EVENTS: _epg.get("events", 0),
+                        },
+                        ATTR_AVAILABLE: True,
+                    },
+                    ATTR_EPG_SCAN: {
+                        ATTR_AVAILABLE: True,
+                    },
+                }
+            )
+        except OctopusNetApiError as exception:
+            LOGGER.error(str(exception))
+        except Exception as exception:
+            LOGGER.exception(exception)
+
+        try:
             _tuner_index = 1
             _tuner_total_lock = False
             _tuner_total_count = _tuner_total_strength = _tuner_total_snr = _tuner_total_quality = _tuner_total_level = 0
@@ -139,16 +228,21 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                     _tuner_total_quality += _tuner_quality
                     _tuner_total_level += _tuner_level
 
-                _data[_tuner_key] = {
-                    ATTR_STATE: _tuner_state,
-                    ATTR_EXTRA_STATE_ATTRIBUTES: {
-                        ATTR_LOCK: _tuner_lock,
-                        ATTR_STRENGTH: _tuner_strength,
-                        ATTR_SNR: _tuner_snr,
-                        ATTR_QUALITY: _tuner_quality,
-                        ATTR_LEVEL: _tuner_level,
+                self.data.update(
+                    {
+                        _tuner_key: {
+                            ATTR_STATE: _tuner_state,
+                            ATTR_EXTRA_STATE_ATTRIBUTES: {
+                                ATTR_LOCK: _tuner_lock,
+                                ATTR_STRENGTH: _tuner_strength,
+                                ATTR_SNR: _tuner_snr,
+                                ATTR_QUALITY: _tuner_quality,
+                                ATTR_LEVEL: _tuner_level,
+                            },
+                            ATTR_AVAILABLE: True,
+                        },
                     }
-                }
+                )
                 _tuner_index = _tuner_index + 1
 
             if _tuner_total_count > 0:
@@ -157,17 +251,27 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 _tuner_total_quality = (_tuner_total_quality / _tuner_total_count)
                 _tuner_total_level = (_tuner_total_level / _tuner_total_count)
 
-            _data[ATTR_TUNER] = {
-                ATTR_STATE: _tuner_total_count,
-                ATTR_EXTRA_STATE_ATTRIBUTES: {
-                    ATTR_LOCK: _tuner_total_lock,
-                    ATTR_STRENGTH: _tuner_total_strength,
-                    ATTR_SNR: _tuner_total_snr,
-                    ATTR_QUALITY: _tuner_total_quality,
-                    ATTR_LEVEL: _tuner_total_level,
-                },
-            }
+            self.data.update(
+                {
+                    ATTR_TUNER: {
+                        ATTR_STATE: _tuner_total_count,
+                        ATTR_EXTRA_STATE_ATTRIBUTES: {
+                            ATTR_LOCK: _tuner_total_lock,
+                            ATTR_STRENGTH: _tuner_total_strength,
+                            ATTR_SNR: _tuner_total_snr,
+                            ATTR_QUALITY: _tuner_total_quality,
+                            ATTR_LEVEL: _tuner_total_level,
+                        },
+                        ATTR_AVAILABLE: True,
+                    },
+                }
+            )
+        except OctopusNetApiError as exception:
+            LOGGER.error(str(exception))
+        except Exception as exception:
+            LOGGER.exception(exception)
 
+        try:
             _stream_index = 1
             _stream_total_state = False
             _stream_total_input = _stream_total_packets = _stream_total_bytes = 0
@@ -188,40 +292,47 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
                 if _stream_client:
                     _stream_total_clients = _stream_total_clients + _stream_client.split(" ")
 
-                _data[_stream_key] = {
-                    ATTR_STATE: _stream_state,
-                    ATTR_EXTRA_STATE_ATTRIBUTES: {
-                        ATTR_INPUT: _stream_input,
-                        ATTR_PACKETS: _stream_packets,
-                        ATTR_BYTES: _stream_bytes,
-                        ATTR_CLIENT: _stream_client,
+                self.data.update(
+                    {
+                        _stream_key: {
+                            ATTR_STATE: _stream_state,
+                            ATTR_EXTRA_STATE_ATTRIBUTES: {
+                                ATTR_INPUT: _stream_input,
+                                ATTR_PACKETS: _stream_packets,
+                                ATTR_BYTES: _stream_bytes,
+                                ATTR_CLIENT: _stream_client,
+                            },
+                            ATTR_AVAILABLE: True,
+                        },
                     }
-                }
+                )
                 _stream_index = _stream_index + 1
 
-            _data[ATTR_STREAM] = {
-                ATTR_STATE: len(_stream_total_clients),
-                ATTR_EXTRA_STATE_ATTRIBUTES: {
-                    ATTR_INPUT: _stream_total_input,
-                    ATTR_PACKETS: _stream_total_packets,
-                    ATTR_BYTES: _stream_total_bytes,
-                    ATTR_CLIENT: " ".join([str(v) for v in _stream_total_clients]),
-                },
-            }
-            self._last_pull = dt_util.now()
-            _available = True
-        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
+            self.data.update(
+                {
+                    ATTR_STREAM: {
+                        ATTR_STATE: len(_stream_total_clients),
+                        ATTR_EXTRA_STATE_ATTRIBUTES: {
+                            ATTR_INPUT: _stream_total_input,
+                            ATTR_PACKETS: _stream_total_packets,
+                            ATTR_BYTES: _stream_total_bytes,
+                            ATTR_CLIENT: " ".join([str(v) for v in _stream_total_clients]),
+                        },
+                        ATTR_AVAILABLE: True,
+                    },
+                }
+            )
+        except OctopusNetApiError as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
 
-        _data.update(
+        self.data.update(
             {
-                ATTR_LAST_PULL: self._last_pull,
-                ATTR_AVAILABLE: _available,
+                ATTR_LAST_PULL: dt_util.now(),
             }
         )
-        return _data
+        return self.data
 
     async def _async_update_listeners(self) -> None:
         """Schedule update all registered listeners after 1 second."""
@@ -240,9 +351,6 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             await self._async_update_data()
 
-            # Always update HA states after a command was executed.
-            # API calls that change the lawn mower's state update the local object when
-            # executing the command, so only the HA state needs further updates.
             self.hass.async_create_task(
                 self._async_update_listeners()
             )
@@ -255,7 +363,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command reboot to device."""
         try:
             return await self.client.async_start_reboot()
-        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
+        except OctopusNetApiError as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
@@ -266,7 +374,7 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         """Send command epg_scan to device."""
         try:
             return await self.client.async_epg_scan()
-        except (OctopusNetApiTimeoutError, OctopusNetApiCommunicationError, OctopusNetApiAuthenticationError) as exception:
+        except OctopusNetApiError as exception:
             LOGGER.error(str(exception))
         except Exception as exception:
             LOGGER.exception(exception)
