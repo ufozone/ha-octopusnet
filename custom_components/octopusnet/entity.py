@@ -53,6 +53,9 @@ class OctopusNetEntity(CoordinatorEntity):
             configuration_url=self.coordinator.client._endpoint,
         )
 
+    def _update_handler(self) -> None:
+        """Handle updated data."""
+
     def _get_state(
         self,
     ) -> any:
@@ -75,7 +78,7 @@ class OctopusNetEntity(CoordinatorEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self.coordinator.data.get(ATTR_AVAILABLE)
+        return self.coordinator.data.get(self._entity_key, {}).get(ATTR_AVAILABLE, False)
 
     @property
     def extra_state_attributes(self) -> dict[str, any]:
@@ -97,6 +100,3 @@ class OctopusNetEntity(CoordinatorEntity):
         """Handle updated data from the coordinator."""
         self._update_handler()
         self.async_write_ha_state()
-
-    def _update_handler(self) -> None:
-        """Handle updated data."""
