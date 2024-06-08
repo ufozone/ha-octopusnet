@@ -10,7 +10,6 @@ from homeassistant.exceptions import (
 from homeassistant.helpers import (
     config_validation as cv,
 )
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
     DOMAIN,
