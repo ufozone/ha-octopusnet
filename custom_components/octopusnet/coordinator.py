@@ -5,10 +5,17 @@ from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
+    CONF_HOST,
+    CONF_USERNAME,
+    CONF_PASSWORD,
+    CONF_PORT,
+    CONF_SSL,
+    CONF_VERIFY_SSL,
     ATTR_STATE,
     ATTR_TEMPERATURE,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
 )
@@ -53,7 +60,6 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
-        client: OctopusNetApiClient,
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
         """Initialize."""
@@ -64,8 +70,19 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             update_interval=update_interval,
         )
         self.config_entry = config_entry
-        self.client = client
+        self.client = OctopusNetApiClient(
+            host=config_entry.data.get(CONF_HOST),
+            username=config_entry.data.get(CONF_USERNAME, ""),
+            password=config_entry.data.get(CONF_PASSWORD, ""),
+            port=config_entry.data.get(CONF_PORT),
+            tls=config_entry.data.get(CONF_SSL),
+            verify_ssl=config_entry.data.get(CONF_VERIFY_SSL),
+            session=async_get_clientsession(hass),
+        )
         self._last_pull = None
+
+    async def initialize(self) -> None:
+        """Set up a Octopus NET instance."""
 
     async def __aenter__(self):
         """Return Self."""

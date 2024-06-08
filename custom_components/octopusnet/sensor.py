@@ -21,7 +21,6 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
-    DOMAIN,
     ATTR_FANSPEED,
     ATTR_TUNER,
     ATTR_STREAM,
@@ -36,7 +35,7 @@ async def async_setup_entry(
     async_add_entities: Entity,
 ) -> None:
     """Do setup sensors from a config entry created in the integrations UI."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator = config_entry.runtime_data
     entity_descriptions = [
         SensorEntityDescription(
             key=ATTR_FANSPEED,
