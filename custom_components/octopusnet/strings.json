@@ -170,5 +170,27 @@
         }
       }
     }
+  },
+  "services": {
+    "reboot": {
+      "name": "Reboot device",
+      "description": "Command the Octopus NET to reboot.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    },
+    "epg_scan": {
+      "name": "Start EPG scan",
+      "description": "Command the Octopus NET to start EPG scan.",
+      "fields": {
+        "device_id": {
+          "name": "Device(s)",
+          "description": "Device(s) on which the command is to be executed."
+        }
+      }
+    }
   }
 }

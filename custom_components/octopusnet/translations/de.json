@@ -170,5 +170,27 @@
         }
       }
     }
+  },
+  "services": {
+    "reboot": {
+      "name": "Gerät neu starten",
+      "description": "Befiehlt dem Octopus NET, neu zu starten.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    },
+    "epg_scan": {
+      "name": "EPG-Suchlauf starten",
+      "description": "Befiehlt dem Octopus NET, den EPG-Suchlauf zu starten.",
+      "fields": {
+        "device_id": {
+          "name": "Gerät(e)",
+          "description": "Gerät(e), auf dem/denen der Befehl ausgeführt werden soll."
+        }
+      }
+    }
   }
 }
