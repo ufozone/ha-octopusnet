@@ -62,6 +62,7 @@ class OctopusNetApiClient:
     ) -> HassClientResponse:
         """Get information from the device."""
         try:
+            LOGGER.debug(url)
             async with async_timeout.timeout(10):
                 response = await self._session.request(
                     method=method,

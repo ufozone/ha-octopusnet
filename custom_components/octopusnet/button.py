@@ -20,6 +20,7 @@ from homeassistant.helpers.entity import (
 )
 
 from .const import (
+    ATTR_UPDATE,
     ATTR_EPG_SCAN,
     ATTR_REBOOT,
 )
@@ -50,6 +51,13 @@ async def async_setup_entry(
     """Do setup buttons from a config entry created in the integrations UI."""
     coordinator = config_entry.runtime_data
     entity_descriptions = [
+        OctopusNetButtonDescription(
+            key=ATTR_UPDATE,
+            translation_key=ATTR_UPDATE,
+            device_class=ButtonDeviceClass.UPDATE,
+            entity_category=EntityCategory.DIAGNOSTIC,
+            press_action=lambda coordinator: coordinator.async_update_data(),
+        ),
         OctopusNetButtonDescription(
             key=ATTR_REBOOT,
             translation_key=ATTR_REBOOT,

@@ -1,6 +1,8 @@
 """DataUpdateCoordinator for Digital Devices Octopus NET."""
 from __future__ import annotations
 
+import asyncio
+
 from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
@@ -80,6 +82,9 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             session=async_get_clientsession(hass),
         )
         self._last_pull = None
+
+        self._loop = asyncio.get_event_loop()
+        self._scheduled_update_listeners: asyncio.TimerHandle | None = None
 
     async def initialize(self) -> None:
         """Set up a Octopus NET instance."""
@@ -217,6 +222,32 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
             }
         )
         return _data
+
+    async def _async_update_listeners(self) -> None:
+        """Schedule update all registered listeners after 1 second."""
+        if self._scheduled_update_listeners:
+            self._scheduled_update_listeners.cancel()
+
+        self._scheduled_update_listeners = self.hass.loop.call_later(
+            1,
+            lambda: self.async_update_listeners(),
+        )
+
+    async def async_update_data(
+        self,
+    ) -> None:
+        """Update data."""
+        try:
+            await self._async_update_data()
+
+            # Always update HA states after a command was executed.
+            # API calls that change the lawn mower's state update the local object when
+            # executing the command, so only the HA state needs further updates.
+            self.hass.async_create_task(
+                self._async_update_listeners()
+            )
+        except Exception as exception:
+            LOGGER.exception(exception)
 
     async def async_reboot(
         self,
