@@ -109,6 +109,14 @@ Start setup:
 
 ### Buttons
 
+* update
+
+  Attributes:
+
+  ```text
+  last_poll
+  ```
+
 * reboot
 
   Attributes:
