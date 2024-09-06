@@ -18,7 +18,7 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
 
 ## Installation
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > Requires Home Assistant 2023.11.0 or newer.
 
 ### Installation through HACS
@@ -27,7 +27,7 @@ Installation using Home Assistant Community Store (HACS) is recommended.
 
 1. If HACS is not installed, follow HACS installation and configuration at <https://hacs.xyz/>.
 
-2. Click the button below or visit the HACS _Integrations_ pane and add `https://github.com/ufozone/ha-octopusnet.git` as an `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/).
+2. Click the button below or visit HACS and add `https://github.com/ufozone/ha-octopusnet.git` as a custom repository with type `Integration` by following [these instructions](https://hacs.xyz/docs/faq/custom_repositories/).
 
     [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-octopusnet&category=integration)
 
