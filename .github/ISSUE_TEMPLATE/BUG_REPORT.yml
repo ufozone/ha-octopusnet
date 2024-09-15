@@ -71,8 +71,8 @@ body:
       label: Has Octopus NET been recently updated?
       description: "If Octopus NET has recently been updated, a breaking change may have been hidden in it. We should find that out."
       options:
-        - No
-        - Yes
+        - "No"
+        - "Yes"
     validations:
       required: true
 
