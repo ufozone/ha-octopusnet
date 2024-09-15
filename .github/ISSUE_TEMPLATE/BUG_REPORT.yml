@@ -59,6 +59,22 @@ body:
       placeholder: core-2024.9.0
       description: >
         If known, otherwise leave blank.
+  - type: input
+    attributes:
+      label: Which version of Octopus NET Pro is running?
+      placeholder: octonet-pro-2.2.0 
+      description: "Can be found after logging in to your Octopus NET Pro: System Settings ⇒ Firmware version."
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Has Octopus NET been recently updated?
+      description: "If Octopus NET has recently been updated, a breaking change may have been hidden in it. We should find that out."
+      options:
+        - No
+        - Yes
+    validations:
+      required: true
 
   - type: markdown
     attributes:
