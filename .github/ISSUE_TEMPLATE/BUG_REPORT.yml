@@ -8,49 +8,94 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! 🛠️ Please provide the details below to help us address the issue.
-
-  - type: input
-    id: summary
-    attributes:
-      label: Short summary 📝
-      description: A short summary of the bug
-      placeholder: "e.g., The application crashes when I click on 'Submit'"
-    validations:
-      required: true
+        Thanks for taking the time to fill out this bug report! Please provide the details below to help us address the issue.
 
   - type: textarea
     id: description
     attributes:
-      label: Detailed description 📋
-      description: A detailed description of the bug
+      label: Detailed description
+      description: >-
+        We need a detailed description of the issue. Tell us what you were trying to do and what happened.
+
+        Provide a clear and concise description of what the problem is.
       placeholder: "Describe the bug in detail, including steps to reproduce, expected behavior, and actual behavior."
     validations:
       required: true
 
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
   - type: input
     id: version
     attributes:
-      label: Version 📌
-      description: The version of the application where the bug was found
-      placeholder: "e.g., v1.2.3"
-    validations:
-      required: false
+      label: What version of the integration has the issue?
+      placeholder: v1.0.0
+      description: >
+        Can be found in: [Settings ⇒ Devices &amp; services ⇒ Integrations ⇒ Click on integration name](https://my.home-assistant.io/redirect/integration/?domain=octopusnet).
 
+        [![Open your Home Assistant instance and show an integration.](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=octopusnet)
+    validations:
+      required: true
   - type: input
-    id: environment
     attributes:
-      label: Environment 🌐
-      description: The environment in which the bug was found (e.g., browser, OS)
-      placeholder: "e.g., Chrome on Windows 10"
+      label: What was the last working version of the integration?
+      placeholder: v1.0.0
+      description: >
+        If known, otherwise leave blank.
+  - type: input
+    attributes:
+      label: What version of Home Assistant Core has the issue?
+      placeholder: core-2024.9.0
+      description: >
+        Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
+
+        [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What was the last working version of Home Assistant Core?
+      placeholder: core-2024.9.0
+      description: >
+        If known, otherwise leave blank.
+
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Diagnostics information 
+      description: >-
+        The integration provide the ability to [download diagnostic data](https://www.home-assistant.io/docs/configuration/troubleshooting/#debug-logs-and-diagnostics).
+
+        **It would really help if you could download the diagnostics data for the device you are having issues with,
+        and <ins>drag-and-drop that file into the textbox below.</ins>**
+
+        It generally allows pinpointing defects and thus resolving issues faster.
+      placeholder: "Drag-and-drop the diagnostics data file here (do not copy-and-paste the content)"
     validations:
       required: false
-
+  - type: textarea
+    attributes:
+      label: Logs
+      description: Anything in the logs that might be useful for us? For example, error message, or stack traces.
+      render: txt
+      placeholder: "Paste logs"
+    validations:
+      required: false
   - type: textarea
     id: logs
     attributes:
-      label: Logs and screenshots 📂
-      description: Any relevant logs or screenshots that can help identify the issue
-      placeholder: "Paste logs or upload screenshots"
+      label: Screenshots
+      description: Any relevant screenshots that can help identify the issue
+      placeholder: "Upload screenshots"
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: If you have any additional information for us, use the field below.
     validations:
       required: false
