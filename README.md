@@ -67,7 +67,7 @@ Start setup:
 
 ### Binary Sensors
 
-* epg
+* binary_sensor.*{host}*_epg
 
   Attributes:
 
@@ -75,15 +75,9 @@ Start setup:
   total, events, last_poll
   ```
 
-* tuner
+* binary_sensor.*{host}*_tuner_*{n}*
 
-  Attributes:
-
-  ```text
-  count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
-  ```
-
-* tuner_{n}
+  *This entity is disabled by default. You have to activate it if you want to use it.*
 
   Attributes:
 
@@ -91,15 +85,9 @@ Start setup:
   lock, strength, snr, quality, level, last_poll
   ```
 
-* stream
+* binary_sensor.*{host}*_stream_*{n}*
 
-  Attributes:
-
-  ```text
-  total input, total packets, total bytes, total clients, last_poll
-  ```
-
-* stream_{n}
+  *This entity is disabled by default. You have to activate it if you want to use it.*
 
   Attributes:
 
@@ -109,7 +97,7 @@ Start setup:
 
 ### Buttons
 
-* update
+* button.*{host}*_update
 
   Attributes:
 
@@ -117,7 +105,7 @@ Start setup:
   last_poll
   ```
 
-* reboot
+* button.*{host}*_reboot
 
   Attributes:
 
@@ -125,7 +113,7 @@ Start setup:
   last_poll
   ```
 
-* epg_scan
+* button.*{host}*_epg_scan
 
   Attributes:
 
@@ -135,7 +123,7 @@ Start setup:
 
 ### Sensors
 
-* fanspeed
+* sensor.*{host}*_fanspeed
 
   Attributes:
 
@@ -143,12 +131,28 @@ Start setup:
   last_poll
   ```
 
-* temperature
+* sensor.*{host}*_temperature
 
   Attributes:
 
   ```text
   last_poll
+  ```
+
+* sensor.*{host}*_tuner
+
+  Attributes:
+
+  ```text
+  count, avg. strength, avg. snr, avg. quality, avg. level, last_poll
+  ```
+
+* sensor.*{host}*_stream
+
+  Attributes:
+
+  ```text
+  total input, total packets, total bytes, total clients, last_poll
   ```
 
 ### Services
