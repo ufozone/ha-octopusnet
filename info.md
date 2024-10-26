@@ -75,7 +75,7 @@ Start setup:
   total, events, last_poll
   ```
 
-* binary_sensor.*{host}*_tuner_*{n}*
+* binary_sensor.*{host}*\_tuner_*{n}*
 
   *This entity is disabled by default. You have to activate it if you want to use it.*
 
@@ -85,7 +85,7 @@ Start setup:
   lock, strength, snr, quality, level, last_poll
   ```
 
-* binary_sensor.*{host}*_stream_*{n}*
+* binary_sensor.*{host}*\_stream_*{n}*
 
   *This entity is disabled by default. You have to activate it if you want to use it.*
 
