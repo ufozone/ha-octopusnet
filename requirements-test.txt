@@ -3,4 +3,4 @@ colorlog==6.9.0
 ruff==0.7.3
 pydocstyle==6.3.0
 isort==5.13.2
-pytest-homeassistant-custom-component==0.13.182
+pytest-homeassistant-custom-component==0.13.183
