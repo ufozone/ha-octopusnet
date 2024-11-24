@@ -1,6 +1,10 @@
 {
   "services": {
-    "epg_scan": "mdi:cloud-search",
-    "reboot": "mdi:restart"
+    "epg_scan": {
+      "service": "mdi:cloud-search"
+    },
+    "reboot": {
+      "service": "mdi:restart"
+    }
   }
 }
