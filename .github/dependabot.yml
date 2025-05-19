@@ -15,6 +15,6 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages.
       - dependency-type: "all"
-    #ignore:
+    ignore:
       # Dependabot should not update Home Assistant as that should match the homeassistant key in hacs.json
-      #- dependency-name: "homeassistant"
+      - dependency-name: "homeassistant"
