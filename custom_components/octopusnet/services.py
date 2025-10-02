@@ -26,7 +26,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
     if hass.services.async_services().get(DOMAIN):
         return
 
-    @verify_domain_control(hass, DOMAIN)
+    @verify_domain_control(DOMAIN)
     async def async_handle_service(call: ServiceCall) -> None:
         """Call correct Digital Devices Octopus NET service."""
         service = call.service
