@@ -7,7 +7,6 @@ from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
-    __version__ as HAVERSION,
     CONF_HOST,
     CONF_USERNAME,
     CONF_PASSWORD,
