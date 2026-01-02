@@ -4,7 +4,6 @@ from __future__ import annotations
 import asyncio
 
 from datetime import timedelta
-from awesomeversion import AwesomeVersion
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import (
