@@ -68,23 +68,13 @@ class OctopusNetDataUpdateCoordinator(DataUpdateCoordinator):
         update_interval: timedelta = timedelta(seconds=UPDATE_INTERVAL),
     ) -> None:
         """Initialize."""
-        # Version threshold for config_entry attribute in data update coordinator
-        # See: https://github.com/home-assistant/core/pull/138161
-        if AwesomeVersion(HAVERSION) > "2025.07.99":
-            super().__init__(
-                hass=hass,
-                logger=LOGGER,
-                name=DOMAIN,
-                config_entry=config_entry,
-                update_interval=update_interval,
-            )
-        else:
-            super().__init__(
-                hass=hass,
-                logger=LOGGER,
-                name=DOMAIN,
-                update_interval=update_interval,
-            )
+        super().__init__(
+            hass=hass,
+            logger=LOGGER,
+            name=DOMAIN,
+            config_entry=config_entry,
+            update_interval=update_interval,
+        )
         self.config_entry = config_entry
         self.client = OctopusNetApiClient(
             host=config_entry.data.get(CONF_HOST),
