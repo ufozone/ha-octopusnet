@@ -7,7 +7,9 @@ from homeassistant.core import (
 from homeassistant.const import (
     CONF_DEVICE_ID,
 )
-from homeassistant.helpers.device_registry import async_get
+from homeassistant.helpers.device_registry import (
+    async_get_device_and_config_entry_for_domain,
+)
 from homeassistant.helpers.service import (
     verify_domain_control,
 )
@@ -37,19 +39,13 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         device_ids = set(device_ids)
 
         targets = []
-        dr = async_get(hass)
         for device_id in device_ids:
-            device = dr.async_get(device_id)
-            if not device:
-                continue
-            identifiers = list(device.identifiers)[0]
-            if identifiers[0] != DOMAIN:
-                continue
-            for config_entry_id in list(device.config_entries):
-                config_entry = hass.config_entries.async_get_entry(config_entry_id)
-                if config_entry.domain == DOMAIN:
-                    targets.append(config_entry.runtime_data)
-                    break
+            _, config_entry = async_get_device_and_config_entry_for_domain(
+                hass, device_id, domain=DOMAIN
+            )
+
+            if config_entry is not None:
+                targets.append(config_entry.runtime_data)
 
         if service == SERVICE_REBOOT:
             await _async_reboot(hass, targets, data)
