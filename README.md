@@ -18,6 +18,9 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
 
 ## Installation
 
+> [!IMPORTANT]
+> Requires Home Assistant 2026.10.0 or newer.
+
 Installation through the Home Assistant Marketplace (formerly HACS) is recommended.
 
 1. Click the button below or open the **Marketplace** in Home Assistant and search for "Digital Devices Octopus NET Monitoring".
