@@ -21,35 +21,17 @@ Digital Devices Octopus NET Monitoring as a Custom Component for Home Assistant.
 > [!IMPORTANT]
 > Requires Home Assistant 2026.10.0 or newer.
 
-### Installation through HACS
+Installation through the Home Assistant Marketplace (formerly HACS) is recommended.
 
-Installation using Home Assistant Community Store (HACS) is recommended.
+1. Click the button below or open the **Marketplace** in Home Assistant and search for "Digital Devices Octopus NET Monitoring".
 
-1. If HACS is not installed, follow HACS installation and configuration at <https://hacs.xyz/>.
+   [![Open your Home Assistant instance and open a repository in the Marketplace.](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=ufozone&repository=ha-octopusnet)
 
-2. Click the button below or visit HACS and search for "Digital Devices Octopus NET Monitoring" (make sure no type filter is set).
+2. Install the integration and follow the setup instructions.
 
-    [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ufozone&repository=ha-octopusnet&category=integration)
+**Note:** Home Assistant versions older than 2026.11.0 require [HACS](https://hacs.xyz/) to be installed separately. A restart may be required after installation.
 
-3. Install the integration.
-
-4. Restart Home Assistant!
-
-5. Make sure that you refresh your browser window too.
-
-### Manual installation
-
-1. Download the `octopusnet.zip` file from the repository [release section](https://github.com/ufozone/ha-octopusnet/releases).
-
-   Do **not** download directly from the `main` branch.
-
-2. Extract and copy the content into the path `/config/custom_components/octopusnet` of your HA installation.
-
-3. Restart Home Assistant!
-
-4. Make sure that you refresh your browser window too.
-
-### Setup integration
+## Setup integration
 
 Start setup:
 
