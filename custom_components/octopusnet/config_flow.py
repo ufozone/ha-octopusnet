@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from homeassistant.config_entries import (
     ConfigFlow,
-    CONN_CLASS_LOCAL_PUSH,
 )
 from homeassistant.const import (
     CONF_HOST,
@@ -39,7 +38,6 @@ class OctopusNetConfigFlow(ConfigFlow, domain=DOMAIN):
     """Digital Devices Octopus NET config flow."""
 
     VERSION = 1
-    CONNECTION_CLASS = CONN_CLASS_LOCAL_PUSH
 
     def __init__(self) -> None:
         """Initialize the Digital Devices Octopus NET flow."""
